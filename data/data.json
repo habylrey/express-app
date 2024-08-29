@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "buyer_name": "Anna Ivanova",
+    "product_name": "Laptop",
+    "product_rub_price": 75000,
+    "purchased_at": "2023-10-25T14:00:00"
+  },
+  {
+    "id": 2,
+    "buyer_name": "Viktor Smirnov",
+    "product_name": "Smartphone",
+    "product_rub_price": 45000,
+    "purchased_at": "2023-10-24T10:30:00"
+  },
+  {
+    "id": 3,
+    "buyer_name": "Elena Petrova",
+    "product_name": "Headphones",
+    "product_rub_price": 5000,
+    "purchased_at": "2023-10-22T11:45:00"
+  },
+  {
+    "id": 4,
+    "buyer_name": "Ivan Sokolov",
+    "product_name": "Keyboard",
+    "product_rub_price": 2500,
+    "purchased_at": "2023-10-21T09:20:00"
+  },
+  {
+    "id": 5,
+    "buyer_name": "Olga Kuznetsova",
+    "product_name": "Monitor",
+    "product_rub_price": 15000,
+    "purchased_at": "2023-10-20T15:10:00"
+  },
+  {
+    "id": 6,
+    "buyer_name": "Sergey Orlov",
+    "product_name": "External Hard Drive",
+    "product_rub_price": 6000,
+    "purchased_at": "2023-10-19T18:30:00"
+  },
+  {
+    "id": 7,
+    "buyer_name": "Maria Popova",
+    "product_name": "USB Flash Drive",
+    "product_rub_price": 800,
+    "purchased_at": "2023-10-18T12:00:00"
+  },
+  {
+    "id": 8,
+    "buyer_name": "Dmitry Vorobiev",
+    "product_name": "Graphics Tablet",
+    "product_rub_price": 12000,
+    "purchased_at": "2023-10-17T16:45:00"
+  },
+  {
+    "id": 9,
+    "buyer_name": "Natalia Mikhailova",
+    "product_name": "Router",
+    "product_rub_price": 3500,
+    "purchased_at": "2023-10-16T08:15:00"
+  },
+  {
+    "id": 10,
+    "buyer_name": "Andrey Fedorov",
+    "product_name": "Smartwatch",
+    "product_rub_price": 10000,
+    "purchased_at": "2023-10-15T19:05:00"
+  },
+  {
+    "id": 11,
+    "buyer_name": "Irina Nikolaeva",
+    "product_name": "Camera",
+    "product_rub_price": 25000,
+    "purchased_at": "2023-10-14T14:20:00"
+  },
+  {
+    "id": 12,
+    "buyer_name": "Yuri Pavlov",
+    "product_name": "Drone",
+    "product_rub_price": 45000,
+    "purchased_at": "2023-10-13T11:55:00"
+  },
+  {
+    "id": 13,
+    "buyer_name": "Svetlana Lebedeva",
+    "product_name": "Vacuum Cleaner",
+    "product_rub_price": 12000,
+    "purchased_at": "2023-10-12T17:35:00"
+  },
+  {
+    "id": 14,
+    "buyer_name": "Alexey Kuzmin",
+    "product_name": "Coffee Maker",
+    "product_rub_price": 4000,
+    "purchased_at": "2023-10-11T13:40:00"
+  },
+  {
+    "id": 15,
+    "buyer_name": "Tatiana Morozova",
+    "product_name": "Blender",
+    "product_rub_price": 3000,
+    "purchased_at": "2023-10-10T09:30:00"
+  }
+]
