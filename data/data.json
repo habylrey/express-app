@@ -7,25 +7,11 @@
     "purchased_at": "2023-10-25T14:00:00"
   },
   {
-    "id": 2,
-    "buyer_name": "Viktor Smirnov",
-    "product_name": "Smartphone",
-    "product_rub_price": 45000,
-    "purchased_at": "2023-10-24T10:30:00"
-  },
-  {
     "id": 3,
     "buyer_name": "Elena Petrova",
     "product_name": "Headphones",
     "product_rub_price": 5000,
     "purchased_at": "2023-10-22T11:45:00"
-  },
-  {
-    "id": 4,
-    "buyer_name": "Ivan Sokolov",
-    "product_name": "Keyboard",
-    "product_rub_price": 2500,
-    "purchased_at": "2023-10-21T09:20:00"
   },
   {
     "id": 5,
@@ -103,5 +89,12 @@
     "product_name": "Blender",
     "product_rub_price": 3000,
     "purchased_at": "2023-10-10T09:30:00"
+  },
+  {
+    "id": 4,
+    "buyer_name": "Danila Sokolov",
+    "product_name": "Keyboard",
+    "product_rub_price": 2500,
+    "purchased_at": "2023-10-21T09:20:00"
   }
 ]

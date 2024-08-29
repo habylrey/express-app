@@ -11,7 +11,7 @@ class PostController {
 	async getAll(req, res) {
 		try {
 			console.log(req.query);
-			await Services.readData(res);
+			res.json(await Services.readData(res));
 		} catch (error) {
 			console.error(error);
 			res.json({ message: 'failed to get' });
@@ -86,8 +86,8 @@ class PostController {
 				return res.status(400).json({ message: 'id not found' });
 			}
 			const data = await Services.readData();
-			const index = data.findIndex((item) => item.id === id);
-			if (index === -1) {
+			const index = data.findIndex((item) => item.id === Number(id));
+			if (index < 0) {
 				return res.status(404).json({ message: 'not found' });
 			}
 			data.splice(index, 1);
