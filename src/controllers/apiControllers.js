@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dataFilePath = path.resolve(__dirname, '../../data/data.json');
+const dataFilePath = path.resolve(__dirname, '../data/data.json');
 
 class PostController {
 	async getAll(req, res) {
