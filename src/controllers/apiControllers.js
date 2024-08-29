@@ -14,7 +14,7 @@ class PostController {
 			await Services.readData(res);
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({ message: 'failed to get' });
+			res.json({ message: 'failed to get' });
 		}
 	}
 	async update(req, res) {
@@ -46,7 +46,7 @@ class PostController {
 			});
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({ message: 'failed to create' });
+			res.json({ message: 'failed to create' });
 		}
 	}
 
@@ -75,7 +75,7 @@ class PostController {
 			});
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({ message: 'failed to delete' });
+			res.json({ message: 'failed to delete' });
 		}
 	}
 	async delete(req, res) {
@@ -83,16 +83,16 @@ class PostController {
 		try {
 			const { id } = req.query;
 			if (!id) {
-				return res.status(400).json({ message: 'ID is required' });
+				return res.status(400).json({ message: 'id not found' });
 			}
 			const data = await Services.readData();
 			const index = data.findIndex((item) => item.id === id);
 			if (index === -1) {
-				return res.status(404).json({ message: 'Item not found' });
+				return res.status(404).json({ message: 'not found' });
 			}
 			data.splice(index, 1);
 			await Services.writeData(data);
-			res.status(200).json({ message: 'Item deleted successfully' });
+			res.status(200).json({ message: 'success' });
 		} catch (error) {
 			res.json({ message: 'failed to delete' });
 		}
