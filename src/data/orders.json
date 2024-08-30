@@ -1,0 +1,20 @@
+[
+  {
+      "id": 1,
+      "product": "Laptop",
+      "amount": 2,
+      "user_id": 1
+  },
+  {
+      "id": 2,
+      "product": "Smartphone",
+      "amount": 1,
+      "user_id": 2
+  },
+  {
+      "id": 3,
+      "product": "Tablet",
+      "amount": 3,
+      "user_id": 1
+  }
+]
