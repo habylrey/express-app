@@ -1,14 +1,11 @@
-import GroupUserService from './group_user.service.js';
-import {
-	InternalServerErrorException,
-	NotFoundException,
-} from '../server/server.exceptions.js';
 import { Router } from 'express';
+import GroupUserService from './group_user.service.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
-const router = Router();
+function createGroupUserRouter() {
+	const router = Router();
 
-class GroupUserController {
-	getAllGroupUsers = async (req, res, next) => {
+	const getAllGroupUsers = async (req, res, next) => {
 		try {
 			const groupUsers = await GroupUserService.getAllGroupUsers();
 			res.json(groupUsers);
@@ -17,7 +14,7 @@ class GroupUserController {
 		}
 	};
 
-	getGroupUserById = async (req, res, next) => {
+	const getGroupUserById = async (req, res, next) => {
 		try {
 			const groupUser = await GroupUserService.getGroupUserById(
 				req.params.id
@@ -31,7 +28,7 @@ class GroupUserController {
 		}
 	};
 
-	createGroupUser = async (req, res, next) => {
+	const createGroupUser = async (req, res, next) => {
 		try {
 			const newGroupUser = await GroupUserService.createGroupUser(
 				req.body
@@ -42,7 +39,7 @@ class GroupUserController {
 		}
 	};
 
-	updateGroupUser = async (req, res, next) => {
+	const updateGroupUser = async (req, res, next) => {
 		try {
 			const updatedGroupUser = await GroupUserService.updateGroupUser(
 				req.params.id,
@@ -57,7 +54,7 @@ class GroupUserController {
 		}
 	};
 
-	deleteGroupUser = async (req, res, next) => {
+	const deleteGroupUser = async (req, res, next) => {
 		try {
 			const result = await GroupUserService.deleteGroupUser(
 				req.params.id
@@ -70,13 +67,13 @@ class GroupUserController {
 			next(err);
 		}
 	};
+
+	return router
+		.get('/', getAllGroupUsers)
+		.get('/:id', getGroupUserById)
+		.post('/', createGroupUser)
+		.put('/:id', updateGroupUser)
+		.delete('/:id', deleteGroupUser);
 }
 
-const groupUserController = new GroupUserController();
-router.get('/', groupUserController.getAllGroupUsers);
-router.get('/:id', groupUserController.getGroupUserById);
-router.post('/', groupUserController.createGroupUser);
-router.put('/:id', groupUserController.updateGroupUser);
-router.delete('/:id', groupUserController.deleteGroupUser);
-
-export default router;
+export default createGroupUserRouter;

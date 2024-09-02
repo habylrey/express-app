@@ -1,42 +1,39 @@
 import { Router } from 'express';
 import LeadService from './lead.service.js';
-import {
-	InternalServerErrorException,
-	NotFoundException,
-} from '../server/server.exceptions.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
-const router = Router();
+function createLeadRouter() {
+	const router = Router();
 
-class LeadController {
-	async getAllLeads(_, res, next) {
+	const getAllLeads = async (req, res, next) => {
 		try {
 			const leads = await LeadService.getAllLeads();
 			res.json(leads);
 		} catch (err) {
-			next(new InternalServerErrorException('Failed to get lead info'));
+			next(err);
 		}
-	}
+	};
 
-	async getLeadById(req, res, next) {
+	const getLeadById = async (req, res, next) => {
 		try {
-			const leads = await LeadService.getLeadById(req.params.id);
-			if (!leads) throw new NotFoundException('Resource not found');
-			res.json(leads);
+			const lead = await LeadService.getLeadById(req.params.id);
+			if (!lead) throw new NotFoundException('Resource not found');
+			res.json(lead);
 		} catch (err) {
-			next(new InternalServerErrorException('Failed to get lead info'));
+			next(err);
 		}
-	}
+	};
 
-	async createLead(req, res, next) {
+	const createLead = async (req, res, next) => {
 		try {
 			const newLead = await LeadService.createLead(req.body);
 			res.status(201).json(newLead);
 		} catch (err) {
-			next(new InternalServerErrorException('Failed to get lead info'));
+			next(err);
 		}
-	}
+	};
 
-	async updateLead(req, res, next) {
+	const updateLead = async (req, res, next) => {
 		try {
 			const updatedLead = await LeadService.updateLead(
 				req.params.id,
@@ -45,27 +42,26 @@ class LeadController {
 			if (!updatedLead) throw new NotFoundException('Resource not found');
 			res.json(updatedLead);
 		} catch (err) {
-			next(new InternalServerErrorException('Failed to get lead info'));
+			next(err);
 		}
-	}
+	};
 
-	async deleteLead(req, res, next) {
+	const deleteLead = async (req, res, next) => {
 		try {
 			const result = await LeadService.deleteLead(req.params.id);
 			if (!result) throw new NotFoundException('Resource not found');
 			res.status(204).end();
 		} catch (err) {
-			next(new InternalServerErrorException('Failed to get lead info'));
+			next(err);
 		}
-	}
+	};
+
+	return router
+		.get('/', getAllLeads)
+		.get('/:id', getLeadById)
+		.post('/', createLead)
+		.put('/:id', updateLead)
+		.delete('/:id', deleteLead);
 }
 
-const leadController = new LeadController();
-
-router.get('/', leadController.getAllLeads);
-router.get('/:id', leadController.getLeadById);
-router.post('/', leadController.createLead);
-router.put('/:id', leadController.updateLead);
-router.delete('/:id', leadController.deleteLead);
-
-export default router;
+export default createLeadRouter;

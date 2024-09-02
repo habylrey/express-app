@@ -1,13 +1,13 @@
 import express from 'express';
-import { registerRoutes } from './server/router.js';
+import createGlobalRouter from './server/router.js';
 import { errorHandlerMiddleware } from './server/error.handler.js';
 
 const app = express();
+
 app.use(express.json());
+app.use(createGlobalRouter());
 app.use(errorHandlerMiddleware);
 
-registerRoutes(app);
-
 app.listen(5000, () => {
-	console.log(`server started`);
+	console.log('Server started on port 5000');
 });
