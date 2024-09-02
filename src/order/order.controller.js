@@ -1,62 +1,72 @@
+import { Router } from 'express';
 import OrderService from './order.service.js';
+import {
+	InternalServerErrorException,
+	NotFoundException,
+} from '../server/server.exceptions.js';
+
+const router = Router();
 
 class OrderController {
-	async getAllOrders(req, res) {
+	async getAllOrders(req, res, next) {
 		try {
 			const orders = await OrderService.getAllOrders();
 			res.json(orders);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get orders' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get order info'));
 		}
 	}
 
-	async getOrderById(req, res) {
+	async getOrderById(req, res, next) {
 		try {
 			const order = await OrderService.getOrderById(req.params.id);
-			if (!order) {
-				return res.status(404).json({ message: 'Order not found' });
-			}
+			if (!order) throw new NotFoundException('Resource not found');
 			res.json(order);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get order' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get order info'));
 		}
 	}
 
-	async createOrder(req, res) {
+	async createOrder(req, res, next) {
 		try {
 			const newOrder = await OrderService.createOrder(req.body);
 			res.status(201).json(newOrder);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to create order' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to create order'));
 		}
 	}
 
-	async updateOrder(req, res) {
+	async updateOrder(req, res, next) {
 		try {
 			const updatedOrder = await OrderService.updateOrder(
 				req.params.id,
 				req.body
 			);
-			if (!updatedOrder) {
-				return res.status(404).json({ message: 'Order not found' });
-			}
+			if (!updatedOrder)
+				throw new NotFoundException('Resource not found');
 			res.json(updatedOrder);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to update order' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to update order'));
 		}
 	}
 
-	async deleteOrder(req, res) {
+	async deleteOrder(req, res, next) {
 		try {
 			const result = await OrderService.deleteOrder(req.params.id);
-			if (!result) {
-				return res.status(404).json({ message: 'Order not found' });
-			}
+			if (!result) throw new NotFoundException('Resource not found');
 			res.status(204).end();
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to delete order' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to delete order'));
 		}
 	}
 }
 
-export default new OrderController();
+const orderController = new OrderController();
+
+router.get('/', orderController.getAllOrders);
+router.get('/:id', orderController.getOrderById);
+router.post('/', orderController.createOrder);
+router.put('/:id', orderController.updateOrder);
+router.delete('/:id', orderController.deleteOrder);
+
+export default router;

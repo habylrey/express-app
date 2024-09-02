@@ -1,13 +1,13 @@
 import express from 'express';
-import userRoutes from './user/user.routes.js';
-import groupRoutes from './group/group.routes.js';
+import { registerRoutes } from './server/router.js';
+import { errorHandlerMiddleware } from './server/error.handler.js';
 
 const app = express();
 app.use(express.json());
+app.use(errorHandlerMiddleware);
 
-app.use('/api/user', userRoutes);
-app.use('/api/group', groupRoutes);
+registerRoutes(app);
 
 app.listen(5000, () => {
-	console.log('server started');
+	console.log(`server started`);
 });

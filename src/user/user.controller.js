@@ -1,59 +1,76 @@
+import { Router } from 'express';
 import UserService from './user.service.js';
+import OrderRoutes from '../order/order.controller.js';
+import LeadRoutes from '../lead/lead.controller.js';
+import {
+	InternalServerErrorException,
+	NotFoundException,
+} from '../server/server.exceptions.js';
+
+const router = Router();
 
 class UserController {
-    async getAllUsers(req, res) {
-        try {
-            const users = await UserService.getAllUsers();
-            res.json(users);
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to get users' });
-        }
-    }
+	getAllUsers = async (req, res, next) => {
+		try {
+			const users = await UserService.getAllUsers();
+			res.json(users);
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get user info'));
+		}
+	};
 
-    async getUserById(req, res) {
-        try {
-            const user = await UserService.getUserById(req.params.id);
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.json(user);
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to get user' });
-        }
-    }
+	getUserById = async (req, res, next) => {
+		try {
+			const user = await UserService.getUserById(req.params.id);
+			if (!user) throw new NotFoundException('Resource not found');
+			res.json(user);
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get user info'));
+		}
+	};
 
-    async createUser(req, res) {
-        try {
-            const newUser = await UserService.createUser(req.body);
-            res.status(201).json(newUser);
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to create user' });
-        }
-    }
+	createUser = async (req, res, next) => {
+		try {
+			const newUser = await UserService.createUser(req.body);
+			res.status(201).json(newUser);
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to create user'));
+		}
+	};
 
-    async updateUser(req, res) {
-        try {
-            const updatedUser = await UserService.updateUser(req.params.id, req.body);
-            if (!updatedUser) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.json(updatedUser);
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to update user' });
-        }
-    }
+	updateUser = async (req, res, next) => {
+		try {
+			const updatedUser = await UserService.updateUser(
+				req.params.id,
+				req.body
+			);
+			if (!updatedUser) throw new NotFoundException('Resource not found');
+			res.json(updatedUser);
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to update user'));
+		}
+	};
 
-    async deleteUser(req, res) {
-        try {
-            const result = await UserService.deleteUser(req.params.id);
-            if (!result) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.status(204).end();
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to delete user' });
-        }
-    }
+	deleteUser = async (req, res, next) => {
+		try {
+			const result = await UserService.deleteUser(req.params.id);
+			if (!result) throw new NotFoundException('Resource not found');
+			res.status(204).end();
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to delete user'));
+		}
+	};
 }
 
-export default new UserController();
+const userController = new UserController();
+
+router.use('/order', OrderRoutes);
+router.use('/lead', LeadRoutes);
+
+router.get('/', userController.getAllUsers);
+router.get('/:id', userController.getUserById);
+router.post('/', userController.createUser);
+router.put('/:id', userController.updateUser);
+router.delete('/:id', userController.deleteUser);
+
+export default router;

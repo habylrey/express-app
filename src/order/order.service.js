@@ -1,18 +1,18 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import * as service from '../services/service.js';
+import Repository from '../repository/repository.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const ordersPath = path.join(__dirname, '..', 'data', 'orders.json');
 
-const getAllOrders = () => service.getAll(ordersPath);
-const getOrderById = (id) => service.getById(ordersPath, id);
-const createOrder = (orderData) => service.create(ordersPath, orderData);
+const getAllOrders = () => Repository.getAll(ordersPath);
+const getOrderById = (id) => Repository.getById(ordersPath, id);
+const createOrder = (orderData) => Repository.create(ordersPath, orderData);
 const updateOrder = (id, orderData) =>
-	service.update(ordersPath, id, orderData);
-const deleteOrder = (id) => service.remove(ordersPath, id);
+	Repository.update(ordersPath, id, orderData);
+const deleteOrder = (id) => Repository.remove(ordersPath, id);
 
 export default {
 	getAllOrders,

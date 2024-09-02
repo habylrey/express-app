@@ -1,18 +1,18 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import * as service from '../services/service.js';
+import Repository from '../repository/repository.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const groupsPath = path.join(__dirname, '..', 'data', 'groups.json');
 
-const getAllGroups = () => service.getAll(groupsPath);
-const getGroupById = (id) => service.getById(groupsPath, id);
-const createGroup = (groupData) => service.create(groupsPath, groupData);
+const getAllGroups = () => Repository.getAll(groupsPath);
+const getGroupById = (id) => Repository.getById(groupsPath, id);
+const createGroup = (groupData) => Repository.create(groupsPath, groupData);
 const updateGroup = (id, groupData) =>
-	service.update(groupsPath, id, groupData);
-const deleteGroup = (id) => service.remove(groupsPath, id);
+	Repository.update(groupsPath, id, groupData);
+const deleteGroup = (id) => Repository.remove(groupsPath, id);
 
 export default {
 	getAllGroups,

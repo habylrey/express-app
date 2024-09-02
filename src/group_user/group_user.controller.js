@@ -1,74 +1,82 @@
 import GroupUserService from './group_user.service.js';
+import {
+	InternalServerErrorException,
+	NotFoundException,
+} from '../server/server.exceptions.js';
+import { Router } from 'express';
+
+const router = Router();
 
 class GroupUserController {
-	async getAllGroupUsers(req, res) {
+	getAllGroupUsers = async (req, res, next) => {
 		try {
 			const groupUsers = await GroupUserService.getAllGroupUsers();
 			res.json(groupUsers);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get group users' });
+		} catch (err) {
+			next(err);
 		}
-	}
+	};
 
-	async getGroupUserById(req, res) {
+	getGroupUserById = async (req, res, next) => {
 		try {
 			const groupUser = await GroupUserService.getGroupUserById(
 				req.params.id
 			);
 			if (!groupUser) {
-				return res
-					.status(404)
-					.json({ message: 'Group user not found' });
+				return next(new NotFoundException('Resource not found'));
 			}
 			res.json(groupUser);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get group user' });
+		} catch (err) {
+			next(err);
 		}
-	}
+	};
 
-	async createGroupUser(req, res) {
+	createGroupUser = async (req, res, next) => {
 		try {
 			const newGroupUser = await GroupUserService.createGroupUser(
 				req.body
 			);
 			res.status(201).json(newGroupUser);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to create group user' });
+		} catch (err) {
+			next(err);
 		}
-	}
+	};
 
-	async updateGroupUser(req, res) {
+	updateGroupUser = async (req, res, next) => {
 		try {
 			const updatedGroupUser = await GroupUserService.updateGroupUser(
 				req.params.id,
 				req.body
 			);
 			if (!updatedGroupUser) {
-				return res
-					.status(404)
-					.json({ message: 'Group user not found' });
+				return next(new NotFoundException('Resource not found'));
 			}
 			res.json(updatedGroupUser);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to update group user' });
+		} catch (err) {
+			next(err);
 		}
-	}
+	};
 
-	async deleteGroupUser(req, res) {
+	deleteGroupUser = async (req, res, next) => {
 		try {
 			const result = await GroupUserService.deleteGroupUser(
 				req.params.id
 			);
 			if (!result) {
-				return res
-					.status(404)
-					.json({ message: 'Group user not found' });
+				return next(new NotFoundException('Resource not found'));
 			}
 			res.status(204).end();
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to delete group user' });
+		} catch (err) {
+			next(err);
 		}
-	}
+	};
 }
 
-export default new GroupUserController();
+const groupUserController = new GroupUserController();
+router.get('/', groupUserController.getAllGroupUsers);
+router.get('/:id', groupUserController.getGroupUserById);
+router.post('/', groupUserController.createGroupUser);
+router.put('/:id', groupUserController.updateGroupUser);
+router.delete('/:id', groupUserController.deleteGroupUser);
+
+export default router;

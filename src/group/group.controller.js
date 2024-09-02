@@ -1,62 +1,77 @@
+import { Router } from 'express';
 import GroupService from './group.service.js';
+import LegalDataRoutes from '../legal_data/legal_data.controller.js';
+import GroupUserRoutes from '../group_user/group_user.controller.js';
+import {
+	InternalServerErrorException,
+	NotFoundException,
+} from '../server/server.exceptions.js';
+
+const router = Router();
 
 class GroupController {
-	async getAllGroups(req, res) {
+	getAllGroups = async (req, res, next) => {
 		try {
 			const groups = await GroupService.getAllGroups();
 			res.json(groups);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get groups' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get lead info'));
 		}
-	}
+	};
 
-	async getGroupById(req, res) {
+	getGroupById = async (req, res, next) => {
 		try {
 			const group = await GroupService.getGroupById(req.params.id);
-			if (!group) {
-				return res.status(404).json({ message: 'Group not found' });
-			}
+			if (!group) throw new NotFoundException('Resource not found');
 			res.json(group);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to get group' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get lead info'));
 		}
-	}
+	};
 
-	async createGroup(req, res) {
+	createGroup = async (req, res, next) => {
 		try {
 			const newGroup = await GroupService.createGroup(req.body);
 			res.status(201).json(newGroup);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to create group' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get lead info'));
 		}
-	}
+	};
 
-	async updateGroup(req, res) {
+	updateGroup = async (req, res, next) => {
 		try {
 			const updatedGroup = await GroupService.updateGroup(
 				req.params.id,
 				req.body
 			);
-			if (!updatedGroup) {
-				return res.status(404).json({ message: 'Group not found' });
-			}
+			if (!updatedGroup)
+				throw new NotFoundException('Resource not found');
 			res.json(updatedGroup);
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to update group' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get lead info'));
 		}
-	}
+	};
 
-	async deleteGroup(req, res) {
+	deleteGroup = async (req, res, next) => {
 		try {
 			const result = await GroupService.deleteGroup(req.params.id);
-			if (!result) {
-				return res.status(404).json({ message: 'Group not found' });
-			}
+			if (!result) throw new NotFoundException('Resource not found');
 			res.status(204).end();
-		} catch (error) {
-			res.status(500).json({ message: 'Failed to delete group' });
+		} catch (err) {
+			next(new InternalServerErrorException('Failed to get lead info'));
 		}
-	}
+	};
 }
 
-export default new GroupController();
+const groupController = new GroupController();
+
+router.use('/legaldata', LegalDataRoutes);
+router.use('/user', GroupUserRoutes);
+
+router.get('/', groupController.getAllGroups);
+router.get('/:id', groupController.getGroupById);
+router.post('/', groupController.createGroup);
+router.put('/:id', groupController.updateGroup);
+router.delete('/:id', groupController.deleteGroup);
+
+export default router;

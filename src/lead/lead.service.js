@@ -1,17 +1,17 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import * as service from '../services/service.js';
+import Repository from '../repository/repository.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const leadsPath = path.join(__dirname, '..', 'data', 'leads.json');
 
-const getAllLeads = () => service.getAll(leadsPath);
-const getLeadById = (id) => service.getById(leadsPath, id);
-const createLead = (leadData) => service.create(leadsPath, leadData);
-const updateLead = (id, leadData) => service.update(leadsPath, id, leadData);
-const deleteLead = (id) => service.remove(leadsPath, id);
+const getAllLeads = () => Repository.getAll(leadsPath);
+const getLeadById = (id) => Repository.getById(leadsPath, id);
+const createLead = (leadData) => Repository.create(leadsPath, leadData);
+const updateLead = (id, leadData) => Repository.update(leadsPath, id, leadData);
+const deleteLead = (id) => Repository.remove(leadsPath, id);
 
 export default {
 	getAllLeads,
