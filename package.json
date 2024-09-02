@@ -5,7 +5,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx kill-port 5000 && nodemon src/index.js",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
