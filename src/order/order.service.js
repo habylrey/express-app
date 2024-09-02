@@ -13,6 +13,8 @@ const createOrder = (orderData) => Repository.create(ordersPath, orderData);
 const updateOrder = (id, orderData) =>
 	Repository.update(ordersPath, id, orderData);
 const deleteOrder = (id) => Repository.remove(ordersPath, id);
+const getOrdersByUserId = (userId) =>
+	Repository.getByField(ordersPath, 'user_id', parseInt(userId));
 
 export default {
 	getAllOrders,
@@ -20,4 +22,5 @@ export default {
 	createOrder,
 	updateOrder,
 	deleteOrder,
+	getOrdersByUserId,
 };

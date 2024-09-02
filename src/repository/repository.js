@@ -48,5 +48,9 @@ class Repository {
 		await this.writeData(filePath, filteredItems);
 		return true;
 	}
+	static async getByField(filePath, fieldName, fieldValue) {
+		const items = await this.getAll(filePath);
+		return items.filter((item) => item[fieldName] === fieldValue);
+	}
 }
 export default Repository;

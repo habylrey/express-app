@@ -14,6 +14,8 @@ const createLegalData = (legalData) =>
 const updateLegalData = (id, legalData) =>
 	Repository.update(legalDataPath, id, legalData);
 const deleteLegalData = (id) => Repository.remove(legalDataPath, id);
+const getLegalDataByUserId = (userId) =>
+	Repository.getByField(legalDataPath, 'user_id', parseInt(userId));
 
 export default {
 	getAllLegalData,
@@ -21,4 +23,5 @@ export default {
 	createLegalData,
 	updateLegalData,
 	deleteLegalData,
+	getLegalDataByUserId,
 };

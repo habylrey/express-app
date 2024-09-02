@@ -2,6 +2,7 @@ import { Router } from 'express';
 import UserService from './user.service.js';
 import OrderRoutes from '../order/order.controller.js';
 import LeadRoutes from '../lead/lead.controller.js';
+import LegalDataRoutes from '../legal_data/legal_data.controller.js';
 import {
 	InternalServerErrorException,
 	NotFoundException,
@@ -66,6 +67,7 @@ const userController = new UserController();
 
 router.use('/order', OrderRoutes);
 router.use('/lead', LeadRoutes);
+router.use('/legaldata', LegalDataRoutes);
 
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);

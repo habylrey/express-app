@@ -17,9 +17,9 @@ class LegalDataController {
 		}
 	}
 
-	async getLegalDataById(req, res, next) {
+	async getLegalDataByUserId(req, res, next) {
 		try {
-			const legalData = await LegalDataService.getLegalDataById(
+			const legalData = await LegalDataService.getLegalDataByUserId(
 				req.params.id
 			);
 			if (!legalData) throw new NotFoundException('Resource not found');
@@ -68,7 +68,7 @@ class LegalDataController {
 }
 const legal_dataController = new LegalDataController();
 router.get('/', legal_dataController.getAllLegalData);
-router.get('/:id', legal_dataController.getLegalDataById);
+router.get('/:id', legal_dataController.getLegalDataByUserId);
 router.post('/', legal_dataController.createLegalData);
 router.put('/:id', legal_dataController.updateLegalData);
 router.delete('/:id', legal_dataController.deleteLegalData);

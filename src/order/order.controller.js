@@ -19,7 +19,7 @@ class OrderController {
 
 	async getOrderById(req, res, next) {
 		try {
-			const order = await OrderService.getOrderById(req.params.id);
+			const order = await OrderService.getOrdersByUserId(req.params.id);
 			if (!order) throw new NotFoundException('Resource not found');
 			res.json(order);
 		} catch (err) {

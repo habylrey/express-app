@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import GroupService from './group.service.js';
-import LegalDataRoutes from '../legal_data/legal_data.controller.js';
 import GroupUserRoutes from '../group_user/group_user.controller.js';
 import {
 	InternalServerErrorException,
@@ -65,7 +64,6 @@ class GroupController {
 
 const groupController = new GroupController();
 
-router.use('/legaldata', LegalDataRoutes);
 router.use('/user', GroupUserRoutes);
 
 router.get('/', groupController.getAllGroups);
