@@ -1,13 +1,12 @@
-// server/error.handler.js
 export function errorHandlerMiddleware(err, req, res, next) {
 	console.error({
 		date: new Date(),
 		error: err.message,
-		stack: err.stack, // Это поможет в отладке
+		stack: err.stack,
 	});
 
 	if (res.headersSent) {
-		return next(err); // Если заголовки уже отправлены, передаем ошибку дальше
+		return next(err);
 	}
 
 	if (err.statusCode) {
