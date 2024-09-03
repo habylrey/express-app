@@ -14,7 +14,7 @@ app.use(createGlobalRouter());
 app.use(errorHandlerMiddleware);
 
 app.listen(process.env.PORT, () => {
-	console.log(`Server started on port ${process.env.PORT}`);
+	console.log(` port ${process.env.PORT}`);
 });
 
 export default app;

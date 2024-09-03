@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import LegalDataService from './legal_data.service.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
 function createLegalDataRouter() {
 	const router = Router();
 
-	const getAllLegalData = async (__, res, next) => {
+	const getAllLegalData = async (req, res, next) => {
 		try {
 			const legalDatas = await LegalDataService.getAllLegalData();
 			res.json(legalDatas);
@@ -13,9 +14,9 @@ function createLegalDataRouter() {
 		}
 	};
 
-	const getLegalDataByUserId = async (req, res, next) => {
+	const getLegalDataById = async (req, res, next) => {
 		try {
-			const legalData = await LegalDataService.getLegalDataByUserId(
+			const legalData = await LegalDataService.getLegalDataById(
 				req.params.id
 			);
 			res.json(legalData);
@@ -58,7 +59,7 @@ function createLegalDataRouter() {
 
 	return router
 		.get('/all', getAllLegalData)
-		.get('/:id', getLegalDataByUserId)
+		.get('/:id', getLegalDataById)
 		.post('/', createLegalData)
 		.put('/:id', updateLegalData)
 		.delete('/:id', deleteLegalData);

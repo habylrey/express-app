@@ -1,76 +1,75 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import Repository from '../repository/repository.js';
-import { NotFoundException } from '../server/server.exceptions.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const ordersPath = path.join(__dirname, '..', 'data', 'orders.json');
+import orderRepository from './order.repository.js';
+import {
+	NotFoundException,
+	InternalServerErrorException,
+} from '../server/server.exceptions.js';
 
 const getAllOrders = async () => {
 	try {
-		return await Repository.getAll(ordersPath);
+		const orders = await orderRepository.getOrders();
+		if (!orders || orders.length === 0) {
+			throw new NotFoundException('No orders found');
+		}
+		return orders;
 	} catch (error) {
-		throw new Error('Failed to fetch all orders');
+		throw new InternalServerErrorException(
+			`Failed to fetch orders: ${error.message}`
+		);
 	}
 };
 
 const getOrderById = async (id) => {
 	try {
-		const order = await Repository.getById(ordersPath, id);
-		if (!order)
+		const order = await orderRepository.getOrderById(id);
+		if (!order) {
 			throw new NotFoundException(`Order with id ${id} not found`);
+		}
 		return order;
 	} catch (error) {
-		throw error;
+		throw new InternalServerErrorException(
+			`Failed to fetch order by id: ${error.message}`
+		);
 	}
 };
 
 const createOrder = async (orderData) => {
+	if (!orderData.product || !orderData.amount) {
+		throw new Error('Order data is incomplete');
+	}
 	try {
-		return await Repository.create(ordersPath, orderData);
+		return await orderRepository.createOrder(orderData);
 	} catch (error) {
-		throw new Error('Failed to create order');
+		throw new InternalServerErrorException(
+			`Failed to create order: ${error.message}`
+		);
 	}
 };
 
 const updateOrder = async (id, orderData) => {
 	try {
-		const updatedOrder = await Repository.update(ordersPath, id, orderData);
-		if (!updatedOrder)
+		const updatedOrder = await orderRepository.updateOrder(id, orderData);
+		if (!updatedOrder) {
 			throw new NotFoundException(`Order with id ${id} not found`);
+		}
 		return updatedOrder;
 	} catch (error) {
-		throw error;
+		throw new InternalServerErrorException(
+			`Failed to update order: ${error.message}`
+		);
 	}
 };
 
 const deleteOrder = async (id) => {
 	try {
-		const result = await Repository.remove(ordersPath, id);
-		if (!result)
+		const result = await orderRepository.deleteOrder(id);
+		if (!result) {
 			throw new NotFoundException(`Order with id ${id} not found`);
+		}
 		return result;
 	} catch (error) {
-		throw error;
-	}
-};
-
-const getOrdersByUserId = async (userId) => {
-	try {
-		const orders = await Repository.getByField(
-			ordersPath,
-			'user_id',
-			parseInt(userId)
+		throw new InternalServerErrorException(
+			`Failed to delete order: ${error.message}`
 		);
-		if (!orders || orders.length === 0)
-			throw new NotFoundException(
-				`Orders for user id ${userId} not found`
-			);
-		return orders;
-	} catch (error) {
-		throw error;
 	}
 };
 
@@ -80,5 +79,4 @@ export default {
 	createOrder,
 	updateOrder,
 	deleteOrder,
-	getOrdersByUserId,
 };

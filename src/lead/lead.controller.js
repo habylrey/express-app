@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import LeadService from './lead.service.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
 function createLeadRouter() {
 	const router = Router();
 
-	const getAllLeads = async (__, res, next) => {
+	const getAllLeads = async (req, res, next) => {
 		try {
 			const leads = await LeadService.getAllLeads();
 			res.json(leads);

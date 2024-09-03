@@ -7,12 +7,15 @@ import createGroupUserRoutes from '../group_user/group_user.controller.js';
 import createOrderRoutes from '../order/order.controller.js';
 import createLeadRoutes from '../lead/lead.controller.js';
 import createLegalDataRoutes from '../legal_data/legal_data.controller.js';
+import userRepository from '../user/user.repository.js';
 
 const createGlobalRouter = () => {
 	const router = Router();
 
 	router.post('/login', login);
 	router.use(authenticateJWT);
+
+	router.get('/database', userRepository.getUsers);
 
 	router.use('/user', createUserRouter());
 	router.use('/user/order/', createOrderRoutes());

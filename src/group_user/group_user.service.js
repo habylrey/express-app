@@ -1,64 +1,43 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import Repository from '../repository/repository.js';
+import groupUserRepository from './group_user.repository.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const groupUsersPath = path.join(__dirname, '..', 'data', 'group_users.json');
-
 const getAllGroupUsers = async () => {
-	try {
-		return await Repository.getAll(groupUsersPath);
-	} catch (error) {
-		throw new Error('Failed to fetch all group users');
-	}
+	return groupUserRepository.getGroupUsers();
 };
 
 const getGroupUserById = async (id) => {
-	try {
-		const groupUser = await Repository.getById(groupUsersPath, id);
-		if (!groupUser)
-			throw new NotFoundException(`Group user with id ${id} not found`);
-		return groupUser;
-	} catch (error) {
-		throw error;
-	}
+	const groupUser = await groupUserRepository.getGroupUserById(id);
+	if (!groupUser)
+		throw new NotFoundException(`Group user with id ${id} not found`);
+	return groupUser;
 };
 
-const createGroupUser = async (groupUser) => {
-	try {
-		return await Repository.create(groupUsersPath, groupUser);
-	} catch (error) {
-		throw new Error('Failed to create group user');
+const createGroupUser = async (groupUserData) => {
+	if (
+		!groupUserData.name ||
+		!groupUserData.group_id ||
+		!groupUserData.user_id
+	) {
+		throw new Error('Group user data is incomplete');
 	}
+	return groupUserRepository.createGroupUser(groupUserData);
 };
 
-const updateGroupUser = async (id, groupUser) => {
-	try {
-		const updatedGroupUser = await Repository.update(
-			groupUsersPath,
-			id,
-			groupUser
-		);
-		if (!updatedGroupUser)
-			throw new NotFoundException(`Group user with id ${id} not found`);
-		return updatedGroupUser;
-	} catch (error) {
-		throw error;
-	}
+const updateGroupUser = async (id, groupUserData) => {
+	const updatedGroupUser = await groupUserRepository.updateGroupUser(
+		id,
+		groupUserData
+	);
+	if (!updatedGroupUser)
+		throw new NotFoundException(`Group user with id ${id} not found`);
+	return updatedGroupUser;
 };
 
 const deleteGroupUser = async (id) => {
-	try {
-		const result = await Repository.remove(groupUsersPath, id);
-		if (!result)
-			throw new NotFoundException(`Group user with id ${id} not found`);
-		return result;
-	} catch (error) {
-		throw error;
-	}
+	const result = await groupUserRepository.deleteGroupUser(id);
+	if (!result)
+		throw new NotFoundException(`Group user with id ${id} not found`);
+	return result;
 };
 
 export default {

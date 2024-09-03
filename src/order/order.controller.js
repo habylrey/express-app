@@ -7,7 +7,7 @@ function createOrderRouter() {
 
 	const getAllOrders = async (req, res, next) => {
 		try {
-			const orders = await OrderService.getAllOrders();
+			const orders = await OrderService.getOrders();
 			res.json(orders);
 		} catch (err) {
 			next(err);

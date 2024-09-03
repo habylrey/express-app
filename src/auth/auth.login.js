@@ -1,28 +1,20 @@
-import fs from 'fs/promises';
-import path from 'path';
 import jwt from 'jsonwebtoken';
+import dbRepository from '../repository/db.repository.js';
 import { UnauthorizedException } from '../server/server.exceptions.js';
 
 const login = async (req, res, next) => {
 	const { login, password } = req.body;
-	const usersFilePath = path.resolve('src/data/users.json');
-
-	let usersData;
 
 	try {
-		const fileData = await fs.readFile(usersFilePath, 'utf-8');
-		usersData = JSON.parse(fileData);
-	} catch (error) {
-		return next();
-	}
+		const user = await dbRepository.queryOne(
+			`SELECT * FROM "auth" WHERE login = $1 AND password = $2`,
+			[login, password]
+		);
 
-	const user = usersData.find((u) => u.login === login);
+		if (!user) {
+			return next(new UnauthorizedException('Invalid login or password'));
+		}
 
-	if (!user || user.password !== password) {
-		return next(new UnauthorizedException('Invalid login or password'));
-	}
-
-	try {
 		const token = jwt.sign(
 			{ id: user.id, name: user.name },
 			process.env.JWT_SECRET,
@@ -32,11 +24,11 @@ const login = async (req, res, next) => {
 		res.setHeader('Authorization', `Bearer ${token}`);
 		res.cookie('token', token, {
 			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
 		});
 
 		res.json({ token });
 	} catch (error) {
+		console.error(error);
 		return next();
 	}
 };

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import GroupService from './group.service.js';
-import { NotFoundException } from '../server/server.exceptions.js';
 
 function createGroupRouter() {
 	const router = Router();
@@ -10,16 +9,22 @@ function createGroupRouter() {
 			const groups = await GroupService.getAllGroups();
 			res.json(groups);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
 	const getGroupById = async (req, res, next) => {
 		try {
 			const group = await GroupService.getGroupById(req.params.id);
-			res.json(group);
+			if (!group) {
+				res.status(404).json({
+					message: `Group with id ${req.params.id} not found`,
+				});
+			} else {
+				res.json(group);
+			}
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -28,7 +33,7 @@ function createGroupRouter() {
 			const newGroup = await GroupService.createGroup(req.body);
 			res.status(201).json(newGroup);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -38,9 +43,15 @@ function createGroupRouter() {
 				req.params.id,
 				req.body
 			);
-			res.json(updatedGroup);
+			if (!updatedGroup) {
+				res.status(404).json({
+					message: `Group with id ${req.params.id} not found`,
+				});
+			} else {
+				res.json(updatedGroup);
+			}
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -49,7 +60,7 @@ function createGroupRouter() {
 			await GroupService.deleteGroup(req.params.id);
 			res.status(204).end();
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 

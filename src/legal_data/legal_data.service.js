@@ -1,19 +1,12 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import Repository from '../repository/repository.js';
+import legalDataRepository from './legal_data.repository.js';
 import {
 	NotFoundException,
 	InternalServerErrorException,
 } from '../server/server.exceptions.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const legalDataPath = path.join(__dirname, '..', 'data', 'legal_datas.json');
-
 const getAllLegalData = async () => {
 	try {
-		const legalDatas = await Repository.getAll(legalDataPath);
+		const legalDatas = await legalDataRepository.getLegalDatas();
 		if (!legalDatas || legalDatas.length === 0) {
 			throw new NotFoundException('No legal data found');
 		}
@@ -27,7 +20,7 @@ const getAllLegalData = async () => {
 
 const getLegalDataById = async (id) => {
 	try {
-		const legalData = await Repository.getById(legalDataPath, id);
+		const legalData = await legalDataRepository.getLegalDataById(id);
 		if (!legalData) {
 			throw new NotFoundException(`Legal data with id ${id} not found`);
 		}
@@ -40,8 +33,11 @@ const getLegalDataById = async (id) => {
 };
 
 const createLegalData = async (legalData) => {
+	if (!legalData.tax_number || !legalData.name) {
+		throw new Error('Legal data is incomplete');
+	}
 	try {
-		return await Repository.create(legalDataPath, legalData);
+		return await legalDataRepository.createLegalData(legalData);
 	} catch (err) {
 		throw new InternalServerErrorException(
 			`Failed to create legal data: ${err.message}`
@@ -51,13 +47,12 @@ const createLegalData = async (legalData) => {
 
 const updateLegalData = async (id, legalData) => {
 	try {
-		const updatedLegalData = await Repository.update(
-			legalDataPath,
+		const updatedLegalData = await legalDataRepository.updateLegalData(
 			id,
 			legalData
 		);
 		if (!updatedLegalData) {
-			throw new NotFoundException('Resource not found');
+			throw new NotFoundException(`Legal data with id ${id} not found`);
 		}
 		return updatedLegalData;
 	} catch (err) {
@@ -69,34 +64,14 @@ const updateLegalData = async (id, legalData) => {
 
 const deleteLegalData = async (id) => {
 	try {
-		const result = await Repository.remove(legalDataPath, id);
+		const result = await legalDataRepository.deleteLegalData(id);
 		if (!result) {
-			throw new NotFoundException('Resource not found');
+			throw new NotFoundException(`Legal data with id ${id} not found`);
 		}
 		return result;
 	} catch (err) {
 		throw new InternalServerErrorException(
 			`Failed to delete legal data: ${err.message}`
-		);
-	}
-};
-
-const getLegalDataByUserId = async (userId) => {
-	try {
-		const legalData = await Repository.getByField(
-			legalDataPath,
-			'user_id',
-			parseInt(userId)
-		);
-		if (!legalData || legalData.length === 0) {
-			throw new NotFoundException(
-				`Legal data for user_id ${userId} not found`
-			);
-		}
-		return legalData;
-	} catch (err) {
-		throw new InternalServerErrorException(
-			`Failed to retrieve legal data by user_id: ${err.message}`
 		);
 	}
 };
@@ -107,5 +82,4 @@ export default {
 	createLegalData,
 	updateLegalData,
 	deleteLegalData,
-	getLegalDataByUserId,
 };

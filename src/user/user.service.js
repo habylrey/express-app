@@ -1,59 +1,31 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import Repository from '../repository/repository.js';
+import userRepository from './user.repository.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const usersPath = path.join(__dirname, '..', 'data', 'users.json');
-
 const getAllUsers = async () => {
-	try {
-		return await Repository.getAll(usersPath);
-	} catch (error) {
-		throw new Error('Failed to fetch all users');
-	}
+	return userRepository.getUsers();
 };
 
 const getUserById = async (id) => {
-	try {
-		const user = await Repository.getById(usersPath, id);
-		if (!user) throw new NotFoundException(`User with id ${id} not found`);
-		return user;
-	} catch (error) {
-		throw error;
-	}
+	const user = await userRepository.getUserById(id);
+	if (!user) throw new NotFoundException(`User with id ${id} not found`);
+	return user;
 };
 
 const createUser = async (userData) => {
-	try {
-		return await Repository.create(usersPath, userData);
-	} catch (error) {
-		throw new Error('Failed to create user');
-	}
+	return userRepository.createUser(userData);
 };
 
 const updateUser = async (id, userData) => {
-	try {
-		const updatedUser = await Repository.update(usersPath, id, userData);
-		if (!updatedUser)
-			throw new NotFoundException(`User with id ${id} not found`);
-		return updatedUser;
-	} catch (error) {
-		throw error;
-	}
+	const updatedUser = await userRepository.updateUser(id, userData);
+	if (!updatedUser)
+		throw new NotFoundException(`User with id ${id} not found`);
+	return updatedUser;
 };
 
 const deleteUser = async (id) => {
-	try {
-		const result = await Repository.remove(usersPath, id);
-		if (!result)
-			throw new NotFoundException(`User with id ${id} not found`);
-		return result;
-	} catch (error) {
-		throw error;
-	}
+	const result = await userRepository.deleteUser(id);
+	if (!result) throw new NotFoundException(`User with id ${id} not found`);
+	return result;
 };
 
 export default {
