@@ -58,7 +58,7 @@ function createOrderRouter() {
 	};
 
 	return router
-		.get('/', getAllOrders)
+		.get('/all', getAllOrders)
 		.get('/:id', getOrderById)
 		.post('/', createOrder)
 		.put('/:id', updateOrder)

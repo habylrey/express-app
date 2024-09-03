@@ -69,7 +69,7 @@ function createGroupUserRouter() {
 	};
 
 	return router
-		.get('/', getAllGroupUsers)
+		.get('/all', getAllGroupUsers)
 		.get('/:id', getGroupUserById)
 		.post('/', createGroupUser)
 		.put('/:id', updateGroupUser)

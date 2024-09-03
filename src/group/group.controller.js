@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import GroupService from './group.service.js';
-import createGroupUserRoutes from '../group_user/group_user.controller.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
 function createGroupRouter() {
@@ -57,8 +56,6 @@ function createGroupRouter() {
 			next(err);
 		}
 	};
-
-	router.use('/member', createGroupUserRoutes());
 
 	return router
 		.get('/', getAllGroups)

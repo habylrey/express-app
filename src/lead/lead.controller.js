@@ -57,7 +57,7 @@ function createLeadRouter() {
 	};
 
 	return router
-		.get('/', getAllLeads)
+		.get('/all', getAllLeads)
 		.get('/:id', getLeadById)
 		.post('/', createLead)
 		.put('/:id', updateLead)

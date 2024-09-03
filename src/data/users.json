@@ -3,12 +3,17 @@
       "id": 1,
       "name": "John Doe",
       "email": "john@example.com",
-      "age": 30
+      "age": 30,
+      "login": "login1",
+      "password": "password1" 
+
   },
   {
       "id": 2,
       "name": "Jane Smith",
       "email": "jane@example.com",
-      "age": 28
+      "age": 28,
+      "login": "login2",
+      "password": "password2" 
   }
 ]

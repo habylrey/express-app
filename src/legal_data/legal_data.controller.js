@@ -68,7 +68,7 @@ function createLegalDataRouter() {
 	};
 
 	return router
-		.get('/', getAllLegalData)
+		.get('/all', getAllLegalData)
 		.get('/:id', getLegalDataByUserId)
 		.post('/', createLegalData)
 		.put('/:id', updateLegalData)

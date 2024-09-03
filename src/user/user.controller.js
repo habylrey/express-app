@@ -1,8 +1,5 @@
 import { Router } from 'express';
 import UserService from './user.service.js';
-import createOrderRoutes from '../order/order.controller.js';
-import createLeadRoutes from '../lead/lead.controller.js';
-import createLegalDataRoutes from '../legal_data/legal_data.controller.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
 function createUserRouter() {
@@ -58,10 +55,6 @@ function createUserRouter() {
 			next(err);
 		}
 	};
-
-	router.use('/order', createOrderRoutes());
-	router.use('/lead', createLeadRoutes());
-	router.use('/legaldata', createLegalDataRoutes());
 
 	return router
 		.get('/', getAllUsers)

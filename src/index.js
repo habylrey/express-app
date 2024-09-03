@@ -1,13 +1,20 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import createGlobalRouter from './server/router.js';
 import { errorHandlerMiddleware } from './server/error.handler.js';
+
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(createGlobalRouter());
 app.use(errorHandlerMiddleware);
 
-app.listen(5000, () => {
-	console.log('Server started on port 5000');
+app.listen(process.env.PORT, () => {
+	console.log(`Server started on port ${process.env.PORT}`);
 });
+
+export default app;
