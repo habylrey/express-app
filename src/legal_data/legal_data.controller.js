@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import LegalDataService from './legal_data.service.js';
-import { NotFoundException } from '../server/server.exceptions.js';
 
 function createLegalDataRouter() {
 	const router = Router();
 
-	const getAllLegalData = async (req, res, next) => {
+	const getAllLegalData = async (__, res, next) => {
 		try {
 			const legalDatas = await LegalDataService.getAllLegalData();
 			res.json(legalDatas);
@@ -19,11 +18,6 @@ function createLegalDataRouter() {
 			const legalData = await LegalDataService.getLegalDataByUserId(
 				req.params.id
 			);
-			if (!legalData) {
-				throw new NotFoundException(
-					`Legal data with id ${id} not found`
-				);
-			}
 			res.json(legalData);
 		} catch (err) {
 			next(err);
@@ -47,8 +41,6 @@ function createLegalDataRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedLegalData)
-				throw new NotFoundException('Resource not found');
 			res.json(updatedLegalData);
 		} catch (err) {
 			next(err);
@@ -57,10 +49,7 @@ function createLegalDataRouter() {
 
 	const deleteLegalData = async (req, res, next) => {
 		try {
-			const result = await LegalDataService.deleteLegalData(
-				req.params.id
-			);
-			if (!result) throw new NotFoundException('Resource not found');
+			await LegalDataService.deleteLegalData(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);

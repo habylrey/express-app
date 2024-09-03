@@ -17,7 +17,6 @@ function createUserRouter() {
 	const getUserById = async (req, res, next) => {
 		try {
 			const user = await UserService.getUserById(req.params.id);
-			if (!user) throw new NotFoundException('Resource not found');
 			res.json(user);
 		} catch (err) {
 			next(err);
@@ -39,7 +38,6 @@ function createUserRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedUser) throw new NotFoundException('Resource not found');
 			res.json(updatedUser);
 		} catch (err) {
 			next(err);
@@ -48,8 +46,7 @@ function createUserRouter() {
 
 	const deleteUser = async (req, res, next) => {
 		try {
-			const result = await UserService.deleteUser(req.params.id);
-			if (!result) throw new NotFoundException('Resource not found');
+			await UserService.deleteUser(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);

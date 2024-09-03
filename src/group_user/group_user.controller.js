@@ -19,9 +19,6 @@ function createGroupUserRouter() {
 			const groupUser = await GroupUserService.getGroupUserById(
 				req.params.id
 			);
-			if (!groupUser) {
-				return next(new NotFoundException('Resource not found'));
-			}
 			res.json(groupUser);
 		} catch (err) {
 			next(err);
@@ -45,9 +42,6 @@ function createGroupUserRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedGroupUser) {
-				return next(new NotFoundException('Resource not found'));
-			}
 			res.json(updatedGroupUser);
 		} catch (err) {
 			next(err);
@@ -56,12 +50,7 @@ function createGroupUserRouter() {
 
 	const deleteGroupUser = async (req, res, next) => {
 		try {
-			const result = await GroupUserService.deleteGroupUser(
-				req.params.id
-			);
-			if (!result) {
-				return next(new NotFoundException('Resource not found'));
-			}
+			await GroupUserService.deleteGroupUser(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);

@@ -17,7 +17,6 @@ function createGroupRouter() {
 	const getGroupById = async (req, res, next) => {
 		try {
 			const group = await GroupService.getGroupById(req.params.id);
-			if (!group) throw new NotFoundException('Resource not found');
 			res.json(group);
 		} catch (err) {
 			next(err);
@@ -39,8 +38,6 @@ function createGroupRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedGroup)
-				throw new NotFoundException('Resource not found');
 			res.json(updatedGroup);
 		} catch (err) {
 			next(err);
@@ -49,8 +46,7 @@ function createGroupRouter() {
 
 	const deleteGroup = async (req, res, next) => {
 		try {
-			const result = await GroupService.deleteGroup(req.params.id);
-			if (!result) throw new NotFoundException('Resource not found');
+			await GroupService.deleteGroup(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);

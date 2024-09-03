@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import LeadService from './lead.service.js';
-import { NotFoundException } from '../server/server.exceptions.js';
 
 function createLeadRouter() {
 	const router = Router();
 
-	const getAllLeads = async (req, res, next) => {
+	const getAllLeads = async (__, res, next) => {
 		try {
 			const leads = await LeadService.getAllLeads();
 			res.json(leads);
@@ -17,7 +16,6 @@ function createLeadRouter() {
 	const getLeadById = async (req, res, next) => {
 		try {
 			const lead = await LeadService.getLeadById(req.params.id);
-			if (!lead) throw new NotFoundException('Resource not found');
 			res.json(lead);
 		} catch (err) {
 			next(err);
@@ -39,7 +37,6 @@ function createLeadRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedLead) throw new NotFoundException('Resource not found');
 			res.json(updatedLead);
 		} catch (err) {
 			next(err);
@@ -48,8 +45,7 @@ function createLeadRouter() {
 
 	const deleteLead = async (req, res, next) => {
 		try {
-			const result = await LeadService.deleteLead(req.params.id);
-			if (!result) throw new NotFoundException('Resource not found');
+			await LeadService.deleteLead(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);

@@ -15,12 +15,12 @@ const createGlobalRouter = () => {
 	router.use(authenticateJWT);
 
 	router.use('/user', createUserRouter());
-	router.use('/user/order', createOrderRoutes());
-	router.use('/user/lead', createLeadRoutes());
-	router.use('/user/legaldata', createLegalDataRoutes());
+	router.use('/user/order/', createOrderRoutes());
+	router.use('/user/lead/', createLeadRoutes());
+	router.use('/user/legaldata/', createLegalDataRoutes());
 
-	router.use('/group', createGroupRouter());
-	router.use('/group/member', createGroupUserRoutes());
+	router.use('/group/', createGroupRouter());
+	router.use('/group/member/', createGroupUserRoutes());
 
 	return router;
 };

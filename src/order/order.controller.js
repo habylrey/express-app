@@ -16,8 +16,7 @@ function createOrderRouter() {
 
 	const getOrderById = async (req, res, next) => {
 		try {
-			const order = await OrderService.getOrdersByUserId(req.params.id);
-			if (!order) throw new NotFoundException('Resource not found');
+			const order = await OrderService.getOrderById(req.params.id);
 			res.json(order);
 		} catch (err) {
 			next(err);
@@ -39,8 +38,6 @@ function createOrderRouter() {
 				req.params.id,
 				req.body
 			);
-			if (!updatedOrder)
-				throw new NotFoundException('Resource not found');
 			res.json(updatedOrder);
 		} catch (err) {
 			next(err);
@@ -49,8 +46,7 @@ function createOrderRouter() {
 
 	const deleteOrder = async (req, res, next) => {
 		try {
-			const result = await OrderService.deleteOrder(req.params.id);
-			if (!result) throw new NotFoundException('Resource not found');
+			await OrderService.deleteOrder(req.params.id);
 			res.status(204).end();
 		} catch (err) {
 			next(err);
