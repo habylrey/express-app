@@ -7,12 +7,11 @@ const login = async (req, res, next) => {
 
 	try {
 		const user = await dbRepository.queryOne(
-			`SELECT * FROM "auth" WHERE login = $1 AND password = $2`,
-			[login, password]
+			`SELECT * FROM "auth" WHERE login = ${login} AND password = ${password}`
 		);
 
 		if (!user) {
-			return next(new UnauthorizedException('Invalid login or password'));
+			return next();
 		}
 
 		const token = jwt.sign(
