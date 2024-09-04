@@ -5,26 +5,29 @@ const getGroups = async () => {
 };
 
 const getGroupById = async (id) => {
-	return dbRepository.queryOne(`SELECT * FROM "group" WHERE id = ${id}`);
+	return dbRepository.queryOne('SELECT * FROM "group" WHERE id = $1', [id]);
 };
 
 const createGroup = async (groupData) => {
 	const { name } = groupData;
 	return dbRepository.queryOne(
-		`INSERT INTO "group" (name) VALUES (${name}) RETURNING *`
+		'INSERT INTO "group" (name) VALUES ($1) RETURNING *',
+		[name]
 	);
 };
 
 const updateGroup = async (id, groupData) => {
 	const { name } = groupData;
 	return dbRepository.queryOne(
-		`UPDATE "group" SET name = ${name} WHERE id = ${id} RETURNING *`
+		'UPDATE "group" SET name = $1 WHERE id = $2 RETURNING *',
+		[name, id]
 	);
 };
 
 const deleteGroup = async (id) => {
 	return dbRepository.queryOne(
-		`DELETE FROM "group" WHERE id = ${id} RETURNING *`
+		'DELETE FROM "group" WHERE id = $1 RETURNING *',
+		[id]
 	);
 };
 

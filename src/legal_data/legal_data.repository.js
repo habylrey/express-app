@@ -5,28 +5,31 @@ const getLegalDatas = async () => {
 };
 
 const getLegalDataById = async (id) => {
-	return dbRepository.queryOne(
-		`SELECT * FROM "legal_datas" WHERE id = ${id}`
-	);
+	return dbRepository.queryOne('SELECT * FROM "legal_datas" WHERE id = $1', [
+		id,
+	]);
 };
 
 const createLegalData = async (legalData) => {
 	const { tax_number, name } = legalData;
 	return dbRepository.queryOne(
-		`INSERT INTO "legal_datas" (tax_number, name) VALUES (${tax_number}, ${name}) RETURNING *`
+		`INSERT INTO "legal_datas" (tax_number, name) VALUES ($1, $2) RETURNING *`,
+		[tax_number, name]
 	);
 };
 
 const updateLegalData = async (id, legalData) => {
 	const { tax_number, name } = legalData;
 	return dbRepository.queryOne(
-		`UPDATE "legal_datas" SET tax_number = ${tax_number}, name = ${name} WHERE id = ${id} RETURNING *`
+		`UPDATE "legal_datas" SET tax_number = $1, name = $2 WHERE id = $3 RETURNING *`,
+		[tax_number, name, id]
 	);
 };
 
 const deleteLegalData = async (id) => {
 	return dbRepository.queryOne(
-		`DELETE FROM "legal_datas" WHERE id = ${id} RETURNING *`
+		`DELETE FROM "legal_datas" WHERE id = $1 RETURNING *`,
+		[id]
 	);
 };
 

@@ -7,7 +7,8 @@ const login = async (req, res, next) => {
 
 	try {
 		const user = await dbRepository.queryOne(
-			`SELECT * FROM "auth" WHERE login = ${login} AND password = ${password}`
+			`SELECT * FROM "auth" WHERE login = $1 AND password = $2`,
+			[login, password]
 		);
 
 		if (!user) {

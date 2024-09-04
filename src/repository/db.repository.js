@@ -2,7 +2,7 @@ import db from '../db.js';
 
 const query = async (text) => {
 	try {
-		const result = await db.query(text);
+		const result = await db.query(text, param);
 		console.log(result, 'result');
 		return result.rows;
 	} catch (error) {
