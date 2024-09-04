@@ -18,7 +18,7 @@ const createGlobalRouter = () => {
 	router.get('/database', userRepository.getUsers);
 
 	router.use('/user', createUserRouter());
-	router.use('/user/order/', createOrderRoutes());
+	router.use('/user/order', createOrderRoutes());
 	router.use('/user/lead/', createLeadRoutes());
 	router.use('/user/legaldata/', createLegalDataRoutes());
 

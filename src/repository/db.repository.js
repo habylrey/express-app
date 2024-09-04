@@ -1,17 +1,17 @@
 import db from '../db.js';
 
-const query = async (text, params) => {
+const query = async (text) => {
 	try {
-		const result = await db.query(text, params);
+		const result = await db.query(text);
+		console.log(result, 'result');
 		return result.rows;
 	} catch (error) {
-		console.error('Ошибка выполнения запроса:', error);
 		throw error;
 	}
 };
 
-const queryOne = async (text, params) => {
-	const rows = await query(text, params);
+const queryOne = async (text) => {
+	const rows = await query(text);
 	console.log(rows, 'rows');
 	return rows[0] || null;
 };

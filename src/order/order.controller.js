@@ -7,10 +7,10 @@ function createOrderRouter() {
 
 	const getAllOrders = async (req, res, next) => {
 		try {
-			const orders = await OrderService.getOrders();
+			const orders = await OrderService.getAllOrders();
 			res.json(orders);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -19,7 +19,7 @@ function createOrderRouter() {
 			const order = await OrderService.getOrderById(req.params.id);
 			res.json(order);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -28,7 +28,7 @@ function createOrderRouter() {
 			const newOrder = await OrderService.createOrder(req.body);
 			res.status(201).json(newOrder);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -40,7 +40,7 @@ function createOrderRouter() {
 			);
 			res.json(updatedOrder);
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 
@@ -49,7 +49,7 @@ function createOrderRouter() {
 			await OrderService.deleteOrder(req.params.id);
 			res.status(204).end();
 		} catch (err) {
-			next(err);
+			next();
 		}
 	};
 

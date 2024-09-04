@@ -18,15 +18,13 @@ const createUser = async (userData) => {
 const updateUser = async (id, userData) => {
 	const { name, email } = userData;
 	return dbRepository.queryOne(
-		'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-		[name, email, id]
+		`UPDATE users SET name = ${name}, email = ${email} WHERE id = ${id} RETURNING *`
 	);
 };
 
 const deleteUser = async (id) => {
 	return dbRepository.queryOne(
-		'DELETE FROM users WHERE id = $1 RETURNING *',
-		[id]
+		`DELETE FROM users WHERE id = ${id} RETURNING *`
 	);
 };
 
