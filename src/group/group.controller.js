@@ -69,7 +69,10 @@ function createGroupRouter() {
 		.get('/:id', getGroupById)
 		.post('/', createGroup)
 		.put('/:id', updateGroup)
-		.delete('/:id', deleteGroup);
+		.delete('/:id', deleteGroup)
+		.get('/test', (req, res) => {
+			res.send('Group route is working!');
+		});
 }
 
 export default createGroupRouter;

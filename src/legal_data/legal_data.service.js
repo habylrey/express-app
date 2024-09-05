@@ -1,11 +1,8 @@
-import legalDataRepository from './legal_data.repository.js';
-import {
-	NotFoundException,
-	InternalServerErrorException,
-} from '../server/server.exceptions.js';
+import models from '../DTO/models/model.service.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
 const getAllLegalData = async () => {
-	const legalDatas = await legalDataRepository.getLegalDatas();
+	const legalDatas = await models.LegalData.findAll();
 	if (!legalDatas || legalDatas.length === 0) {
 		throw new NotFoundException('No legal data found');
 	}
@@ -13,7 +10,7 @@ const getAllLegalData = async () => {
 };
 
 const getLegalDataById = async (id) => {
-	const legalData = await legalDataRepository.getLegalDataById(id);
+	const legalData = await models.LegalData.findByPk(id);
 	if (!legalData) {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
@@ -24,26 +21,29 @@ const createLegalData = async (legalData) => {
 	if (!legalData.tax_number || !legalData.name) {
 		throw new Error('Legal data is incomplete');
 	}
-	return await legalDataRepository.createLegalData(legalData);
+	return models.LegalData.create(legalData);
 };
 
 const updateLegalData = async (id, legalData) => {
-	const updatedLegalData = await legalDataRepository.updateLegalData(
-		id,
-		legalData
+	const [rowsUpdated, [updatedLegalData]] = await models.LegalData.update(
+		legalData,
+		{
+			where: { id },
+			returning: true,
+		}
 	);
-	if (!updatedLegalData) {
+	if (rowsUpdated === 0) {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
 	return updatedLegalData;
 };
 
 const deleteLegalData = async (id) => {
-	const result = await legalDataRepository.deleteLegalData(id);
-	if (!result) {
+	const rowsDeleted = await models.LegalData.destroy({ where: { id } });
+	if (rowsDeleted === 0) {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
-	return result;
+	return rowsDeleted;
 };
 
 export default {

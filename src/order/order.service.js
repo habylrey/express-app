@@ -1,11 +1,8 @@
-import orderRepository from './order.repository.js';
-import {
-	NotFoundException,
-	InternalServerErrorException,
-} from '../server/server.exceptions.js';
+import models from '../DTO/models/model.service.js';
+import { NotFoundException } from '../server/server.exceptions.js';
 
 const getAllOrders = async () => {
-	const orders = await orderRepository.getOrders();
+	const orders = await models.Order.findAll();
 	if (!orders || orders.length === 0) {
 		throw new NotFoundException();
 	}
@@ -13,7 +10,7 @@ const getAllOrders = async () => {
 };
 
 const getOrderById = async (id) => {
-	const order = await orderRepository.getOrderById(id);
+	const order = await models.Order.findByPk(id);
 	if (!order) {
 		throw new NotFoundException(`Order with id ${id} not found`);
 	}
@@ -24,23 +21,26 @@ const createOrder = async (orderData) => {
 	if (!orderData.product || !orderData.amount) {
 		throw new NotFoundException('Order data is incomplete');
 	}
-	return await orderRepository.createOrder(orderData);
+	return models.Order.create(orderData);
 };
 
 const updateOrder = async (id, orderData) => {
-	const updatedOrder = await orderRepository.updateOrder(id, orderData);
-	if (!updatedOrder) {
+	const [rowsUpdated, [updatedOrder]] = await models.Order.update(orderData, {
+		where: { id },
+		returning: true,
+	});
+	if (rowsUpdated === 0) {
 		throw new NotFoundException(`Order with id ${id} not found`);
 	}
 	return updatedOrder;
 };
 
 const deleteOrder = async (id) => {
-	const result = await orderRepository.deleteOrder(id);
-	if (!result) {
+	const rowsDeleted = await models.Order.destroy({ where: { id } });
+	if (rowsDeleted === 0) {
 		throw new NotFoundException(`Order with id ${id} not found`);
 	}
-	return result;
+	return rowsDeleted;
 };
 
 export default {

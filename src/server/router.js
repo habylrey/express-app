@@ -7,23 +7,59 @@ import createGroupUserRoutes from '../group_user/group_user.controller.js';
 import createOrderRoutes from '../order/order.controller.js';
 import createLeadRoutes from '../lead/lead.controller.js';
 import createLegalDataRoutes from '../legal_data/legal_data.controller.js';
-import userRepository from '../user/user.repository.js';
+import validateRequest from '../DTO/validate.middleware.js';
+import requestLogger from '../DTO/logger.middleware.js';
+import {
+	AuthSchema,
+	groupSchema,
+	groupUserSchema,
+	leadSchema,
+	legalDataSchema,
+	userSchema,
+} from '../DTO/validate.schemas.js';
 
 const createGlobalRouter = () => {
 	const router = Router();
+	router.post('/login', validateRequest(AuthSchema), login);
+	router.use(requestLogger, authenticateJWT);
 
-	router.post('/login', login);
-	router.use(authenticateJWT);
+	router.use(
+		'/user',
+		requestLogger,
+		validateRequest(userSchema),
+		createUserRouter()
+	);
+	router.use(
+		'/user/order',
+		requestLogger,
+		validateRequest(groupSchema),
+		createOrderRoutes()
+	);
+	router.use(
+		'/user/lead/',
+		validateRequest(leadSchema),
+		requestLogger,
+		createLeadRoutes()
+	);
+	router.use(
+		'/user/legaldata/',
+		requestLogger,
+		validateRequest(legalDataSchema),
+		createLegalDataRoutes()
+	);
 
-	router.get('/database', userRepository.getUsers);
-
-	router.use('/user', createUserRouter());
-	router.use('/user/order', createOrderRoutes());
-	router.use('/user/lead/', createLeadRoutes());
-	router.use('/user/legaldata/', createLegalDataRoutes());
-
-	router.use('/group/', createGroupRouter());
-	router.use('/group/member/', createGroupUserRoutes());
+	router.use(
+		'/group',
+		validateRequest(groupSchema),
+		requestLogger,
+		createGroupRouter()
+	);
+	router.use(
+		'/group/member',
+		validateRequest(groupUserSchema),
+		requestLogger,
+		createGroupUserRoutes()
+	);
 
 	return router;
 };

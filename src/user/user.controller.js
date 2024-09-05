@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import UserService from './user.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
-
+import validateRequest from '../DTO/validate.middleware.js';
+import { userSchema } from '../DTO/validate.schemas.js';
 function createUserRouter() {
 	const router = Router();
 

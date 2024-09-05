@@ -1,14 +1,15 @@
-import groupUserRepository from './group_user.repository.js';
+import models from '../DTO/models/model.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
 const getAllGroupUsers = async () => {
-	return groupUserRepository.getGroupUsers();
+	return models.GroupUser.findAll();
 };
 
 const getGroupUserById = async (id) => {
-	const groupUser = await groupUserRepository.getGroupUserById(id);
-	if (!groupUser)
+	const groupUser = await models.GroupUser.findByPk(id);
+	if (!groupUser) {
 		throw new NotFoundException(`Group user with id ${id} not found`);
+	}
 	return groupUser;
 };
 
@@ -20,24 +21,33 @@ const createGroupUser = async (groupUserData) => {
 	) {
 		throw new Error('Group user data is incomplete');
 	}
-	return groupUserRepository.createGroupUser(groupUserData);
+	return models.GroupUser.create(groupUserData);
 };
 
 const updateGroupUser = async (id, groupUserData) => {
-	const updatedGroupUser = await groupUserRepository.updateGroupUser(
-		id,
-		groupUserData
+	const [rowsUpdated, [updatedGroupUser]] = await models.GroupUser.update(
+		groupUserData,
+		{
+			where: { id },
+			returning: true,
+		}
 	);
-	if (!updatedGroupUser)
+
+	console.log(rowsUpdated, updateGroupUser);
+
+	if (rowsUpdated === 0) {
 		throw new NotFoundException(`Group user with id ${id} not found`);
+	}
+
 	return updatedGroupUser;
 };
 
 const deleteGroupUser = async (id) => {
-	const result = await groupUserRepository.deleteGroupUser(id);
-	if (!result)
+	const rowsDeleted = await models.GroupUser.destroy({ where: { id } });
+	if (rowsDeleted === 0) {
 		throw new NotFoundException(`Group user with id ${id} not found`);
-	return result;
+	}
+	return rowsDeleted;
 };
 
 export default {

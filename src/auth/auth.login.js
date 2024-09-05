@@ -1,22 +1,22 @@
 import jwt from 'jsonwebtoken';
-import dbRepository from '../repository/db.repository.js';
-import { UnauthorizedException } from '../server/server.exceptions.js';
+import models from '../DTO/models/model.service.js';
 
 const login = async (req, res, next) => {
 	const { login, password } = req.body;
 
 	try {
-		const user = await dbRepository.queryOne(
-			`SELECT * FROM "auth" WHERE login = $1 AND password = $2`,
-			[login, password]
-		);
-
+		const user = await models.Auth.findOne({
+			where: { login: login, password: password },
+		});
+		const userId = await models.User.findOne({
+			where: { id: user.dataValues.user_id },
+		});
 		if (!user) {
 			return next();
 		}
 
 		const token = jwt.sign(
-			{ id: user.id, name: user.name },
+			{ id: user.id, name: user.name, role: userId.dataValues.role },
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
 		);
@@ -26,9 +26,13 @@ const login = async (req, res, next) => {
 			httpOnly: true,
 		});
 
-		res.json({ token });
+		res.json([
+			{
+				message: `Hello, ${userId.dataValues.role} ${userId.dataValues.name}`,
+			},
+			{ token },
+		]);
 	} catch (error) {
-		console.error(error);
 		return next();
 	}
 };

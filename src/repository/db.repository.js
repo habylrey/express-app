@@ -1,18 +1,17 @@
 import db from '../db.js';
 
-const query = async (text) => {
+const query = async (text, param) => {
 	try {
 		const result = await db.query(text, param);
-		console.log(result, 'result');
 		return result.rows;
 	} catch (error) {
+		console.error('Query error:', error);
 		throw error;
 	}
 };
 
-const queryOne = async (text) => {
-	const rows = await query(text);
-	console.log(rows, 'rows');
+const queryOne = async (text, params) => {
+	const rows = await query(text, params);
 	return rows[0] || null;
 };
 
