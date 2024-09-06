@@ -1,40 +1,45 @@
 import jwt from 'jsonwebtoken';
 import models from '../DTO/models/model.service.js';
 
-const login = async (req, res, next) => {
+function login(req, res, next) {
 	const { login, password } = req.body;
-
 	try {
-		const user = await models.Auth.findOne({
+		models.Auth.findOne({
 			where: { login: login, password: password },
-		});
-		const userId = await models.User.findOne({
-			where: { id: user.dataValues.user_id },
-		});
-		if (!user) {
-			return next();
-		}
-
-		const token = jwt.sign(
-			{ id: user.id, name: user.name, role: userId.dataValues.role },
-			process.env.JWT_SECRET,
-			{ expiresIn: '1h' }
-		);
-
-		res.setHeader('Authorization', `Bearer ${token}`);
-		res.cookie('token', token, {
-			httpOnly: true,
-		});
-
-		res.json([
-			{
-				message: `Hello, ${userId.dataValues.role} ${userId.dataValues.name}`,
+			include: {
+				model: models.User,
+				attributes: ['role', 'name'],
 			},
-			{ token },
-		]);
+		})
+			.then((user) => {
+				if (!user) {
+					return next(new Error('Invalid login or password'));
+				}
+
+				const token = jwt.sign(
+					{ id: user.id, name: user.User.name, role: user.User.role },
+					process.env.JWT_SECRET,
+					{ expiresIn: '1h' }
+				);
+
+				res.setHeader('Authorization', `Bearer ${token}`);
+				res.cookie('token', token, {
+					httpOnly: true,
+				});
+
+				res.json([
+					{
+						message: `Hello, ${user.User.role} ${user.User.name}`,
+					},
+					{ token },
+				]);
+			})
+			.catch((error) => {
+				next(error);
+			});
 	} catch (error) {
-		return next();
+		next(error);
 	}
-};
+}
 
 export default login;

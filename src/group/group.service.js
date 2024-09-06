@@ -1,34 +1,23 @@
 import models from '../DTO/models/model.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
-const getAllGroups = async () => {
-	try {
-		return models.Group.findAll();
-	} catch {
-		throw NotFoundException();
+async function getAllGroups() {
+	return await models.Group.findAll();
+}
+
+async function getGroupById(id) {
+	const group = await models.Group.findByPk(id);
+	if (!group) {
+		throw new NotFoundException(`Group with id ${id} not found`);
 	}
-};
+	return group;
+}
 
-const getGroupById = async (req, res, next) => {
-	try {
-		const group = await GroupService.getGroupById(req.params.id);
-		if (!group) {
-			res.status(404).json({
-				message: `Group with id ${req.params.id} not found`,
-			});
-		} else {
-			res.json(group);
-		}
-	} catch (err) {
-		next();
-	}
-};
+async function createGroup(groupData) {
+	return await models.Group.create(groupData);
+}
 
-const createGroup = async (groupData) => {
-	return models.Group.create(groupData);
-};
-
-const updateGroup = async (id, groupData) => {
+async function updateGroup(id, groupData) {
 	const [rowsUpdated, [updatedGroup]] = await models.Group.update(groupData, {
 		where: { id },
 		returning: true,
@@ -39,15 +28,15 @@ const updateGroup = async (id, groupData) => {
 	}
 
 	return updatedGroup;
-};
+}
 
-const deleteGroup = async (id) => {
+async function deleteGroup(id) {
 	const rowsDeleted = await models.Group.destroy({ where: { id } });
 	if (rowsDeleted === 0) {
 		throw new NotFoundException(`Group with id ${id} not found`);
 	}
 	return rowsDeleted;
-};
+}
 
 export default {
 	getAllGroups,

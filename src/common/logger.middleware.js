@@ -11,9 +11,13 @@ const requestLogger = (req, res, next) => {
 	const requestId = req.headers['x-request-id'] || 'N/A';
 
 	Logger.info(
-		`Request ID: ${requestId}, Type: Incoming Request, Method: ${method}, URL: ${url}, Body: ${JSON.stringify(
-			body
-		)}`
+		JSON.stringify({
+			request_id: requestId,
+			type: 'Incoming request',
+			method: method,
+			URL: url,
+			Body: body,
+		})
 	);
 
 	const originalSend = res.send.bind(res);
@@ -31,7 +35,14 @@ const requestLogger = (req, res, next) => {
 
 	res.on('finish', () => {
 		Logger.info(
-			`Request ID: ${requestId}, Type: Outgoing Response, Method: ${method}, URL: ${url}, Status Code: ${res.statusCode}, Response Body: ${responseBody}`
+			JSON.stringify({
+				request_id: requestId,
+				type: 'Incoming request',
+				Status_code: res.statusCode,
+				method: method,
+				URL: url,
+				Response_Body: body,
+			})
 		);
 	});
 

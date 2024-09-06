@@ -11,15 +11,15 @@ export default class User extends Model {
 				},
 				name: {
 					type: DataTypes.STRING,
-					allowNull: false,
+					allowNull: true,
 				},
 				role: {
 					type: DataTypes.STRING,
-					allowNull: false,
+					allowNull: true,
 				},
 				age: {
 					type: DataTypes.INTEGER,
-					allowNull: false,
+					allowNull: true,
 				},
 			},
 			{

@@ -3,12 +3,12 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import createGlobalRouter from './server/router.js';
 import { errorHandlerMiddleware } from './server/error.handler.js';
-import { sequelize } from './DTO/models/model.service.js';
+import requestLogger from './common/logger.middleware.js';
 dotenv.config();
-sequelize.sync({ force: false });
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(requestLogger);
 app.use(createGlobalRouter());
 app.use(errorHandlerMiddleware);
 

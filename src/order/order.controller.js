@@ -1,38 +1,39 @@
 import { Router } from 'express';
 import OrderService from './order.service.js';
-import { NotFoundException } from '../server/server.exceptions.js';
+import validateRequest from '../common/validate.middleware.js';
+import { idSchema, orderSchema } from '../common/validate.schemas.js';
 
 function createOrderRouter() {
 	const router = Router();
 
-	const getAllOrders = async (req, res, next) => {
+	async function getAllOrders(req, res, next) {
 		try {
 			const orders = await OrderService.getAllOrders();
 			res.json(orders);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const getOrderById = async (req, res, next) => {
+	async function getOrderById(req, res, next) {
 		try {
 			const order = await OrderService.getOrderById(req.params.id);
 			res.json(order);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const createOrder = async (req, res, next) => {
+	async function createOrder(req, res, next) {
 		try {
 			const newOrder = await OrderService.createOrder(req.body);
 			res.status(201).json(newOrder);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const updateOrder = async (req, res, next) => {
+	async function updateOrder(req, res, next) {
 		try {
 			const updatedOrder = await OrderService.updateOrder(
 				req.params.id,
@@ -40,25 +41,25 @@ function createOrderRouter() {
 			);
 			res.json(updatedOrder);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const deleteOrder = async (req, res, next) => {
+	async function deleteOrder(req, res, next) {
 		try {
 			await OrderService.deleteOrder(req.params.id);
 			res.status(204).end();
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
 	return router
-		.get('/all', getAllOrders)
-		.get('/:id', getOrderById)
-		.post('/', createOrder)
-		.put('/:id', updateOrder)
-		.delete('/:id', deleteOrder);
+		.get('/all', validateRequest(idSchema), getAllOrders)
+		.get('/:id', validateRequest(idSchema), getOrderById)
+		.post('/', validateRequest(orderSchema), createOrder)
+		.put('/:id', validateRequest(orderSchema), updateOrder)
+		.delete('/:id', validateRequest(idSchema), deleteOrder);
 }
 
 export default createOrderRouter;

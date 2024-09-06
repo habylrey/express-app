@@ -1,30 +1,30 @@
 import models from '../DTO/models/model.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
-const getAllLegalData = async () => {
+async function getAllLegalData() {
 	const legalDatas = await models.LegalData.findAll();
 	if (!legalDatas || legalDatas.length === 0) {
 		throw new NotFoundException('No legal data found');
 	}
 	return legalDatas;
-};
+}
 
-const getLegalDataById = async (id) => {
+async function getLegalDataById(id) {
 	const legalData = await models.LegalData.findByPk(id);
 	if (!legalData) {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
 	return legalData;
-};
+}
 
-const createLegalData = async (legalData) => {
+async function createLegalData(legalData) {
 	if (!legalData.tax_number || !legalData.name) {
 		throw new Error('Legal data is incomplete');
 	}
 	return models.LegalData.create(legalData);
-};
+}
 
-const updateLegalData = async (id, legalData) => {
+async function updateLegalData(id, legalData) {
 	const [rowsUpdated, [updatedLegalData]] = await models.LegalData.update(
 		legalData,
 		{
@@ -36,15 +36,15 @@ const updateLegalData = async (id, legalData) => {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
 	return updatedLegalData;
-};
+}
 
-const deleteLegalData = async (id) => {
+async function deleteLegalData(id) {
 	const rowsDeleted = await models.LegalData.destroy({ where: { id } });
 	if (rowsDeleted === 0) {
 		throw new NotFoundException(`Legal data with id ${id} not found`);
 	}
 	return rowsDeleted;
-};
+}
 
 export default {
 	getAllLegalData,

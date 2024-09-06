@@ -1,78 +1,63 @@
 import { Router } from 'express';
 import GroupService from './group.service.js';
+import validateRequest from '../common/validate.middleware.js';
+import { groupSchema, idSchema } from '../common/validate.schemas.js';
 
 function createGroupRouter() {
 	const router = Router();
 
-	const getAllGroups = async (req, res, next) => {
+	async function getAllGroups(req, res, next) {
 		try {
 			const groups = await GroupService.getAllGroups();
 			res.json(groups);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const getGroupById = async (req, res, next) => {
+	async function getGroupById(req, res, next) {
 		try {
 			const group = await GroupService.getGroupById(req.params.id);
-			if (!group) {
-				res.status(404).json({
-					message: `Group with id ${req.params.id} not found`,
-				});
-			} else {
-				res.json(group);
-			}
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const createGroup = async (req, res, next) => {
+	async function createGroup(req, res, next) {
 		try {
 			const newGroup = await GroupService.createGroup(req.body);
 			res.status(201).json(newGroup);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
-	const updateGroup = async (req, res, next) => {
+	async function updateGroup(req, res, next) {
 		try {
 			const updatedGroup = await GroupService.updateGroup(
 				req.params.id,
 				req.body
 			);
-			if (!updatedGroup) {
-				res.status(404).json({
-					message: `Group with id ${req.params.id} not found`,
-				});
-			} else {
-				res.json(updatedGroup);
-			}
+			res.json(updatedGroup);
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
-
-	const deleteGroup = async (req, res, next) => {
+	}
+	async function deleteGroup(req, res, next) {
 		try {
 			await GroupService.deleteGroup(req.params.id);
 			res.status(204).end();
 		} catch (err) {
-			next();
+			next(err);
 		}
-	};
+	}
 
 	return router
 		.get('/', getAllGroups)
-		.get('/:id', getGroupById)
-		.post('/', createGroup)
-		.put('/:id', updateGroup)
-		.delete('/:id', deleteGroup)
-		.get('/test', (req, res) => {
-			res.send('Group route is working!');
-		});
+		.get('/:id', validateRequest(idSchema), getGroupById)
+		.post('/', validateRequest(groupSchema), createGroup)
+		.put('/:id', validateRequest(groupSchema), updateGroup)
+		.delete('/:id', validateRequest(idSchema), deleteGroup);
 }
 
 export default createGroupRouter;
