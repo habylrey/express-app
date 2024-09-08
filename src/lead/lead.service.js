@@ -1,4 +1,4 @@
-import models from '../DTO/models/model.service.js';
+import models from '../common/models/model.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 
 async function getAllLeads() {

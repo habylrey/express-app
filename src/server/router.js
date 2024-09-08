@@ -8,7 +8,7 @@ import createOrderRoutes from '../order/order.controller.js';
 import createLeadRoutes from '../lead/lead.controller.js';
 import createLegalDataRoutes from '../legal_data/legal_data.controller.js';
 import validateRequest from '../common/validate.middleware.js';
-import requestLogger from '../common/logger.middleware.js';
+// import requestLogger from '../common/logger.middleware.js';
 import { AuthSchema } from '../common/validate.schemas.js';
 
 const createGlobalRouter = () => {
