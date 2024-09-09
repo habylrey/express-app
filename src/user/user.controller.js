@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import UserService from './user.service.js';
 import validateRequest from '../common/validate.middleware.js';
-import { idSchema, userSchema } from '../common/validate.schemas.js';
+import { idSchema } from '../common/validate.schemas.js';
+import userSchema from './DTO/user.schema.js';
 
 function createUserRouter() {
 	const router = Router();

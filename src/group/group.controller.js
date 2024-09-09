@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import GroupService from './group.service.js';
 import validateRequest from '../common/validate.middleware.js';
-import { groupSchema, idSchema } from '../common/validate.schemas.js';
+import { idSchema } from '../common/validate.schemas.js';
+import groupSchema from './DTO/group.schema.js';
 
 function createGroupRouter() {
 	const router = Router();

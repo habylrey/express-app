@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import OrderService from './order.service.js';
 import validateRequest from '../common/validate.middleware.js';
-import { idSchema, orderSchema } from '../common/validate.schemas.js';
-
+import { idSchema } from '../common/validate.schemas.js';
+import orderSchema from './DTO/order.schema.js';
 function createOrderRouter() {
 	const router = Router();
 

@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "sync-db": "node src/common/syncDB.js",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "sync-db": "node syncDatabase.js"
+    "dev": "npm run sync-db && nodemon src/index.js"
+
   },
   "author": "",
   "license": "ISC",

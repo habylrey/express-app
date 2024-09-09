@@ -2,7 +2,8 @@ import { Router } from 'express';
 import GroupUserService from './group_user.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 import validateRequest from '../common/validate.middleware.js';
-import { groupUserSchema, idSchema } from '../common/validate.schemas.js';
+import { idSchema } from '../common/validate.schemas.js';
+import groupUserSchema from './DTO/group_user.schema.js';
 
 function createGroupUserRouter() {
 	const router = Router();

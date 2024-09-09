@@ -1,5 +1,5 @@
 import Joi from 'joi';
-export const leadSchema = Joi.object({
+const leadSchema = Joi.object({
 	body: {
 		name: Joi.string().min(1).max(30),
 		email: Joi.string().email(),
@@ -14,3 +14,4 @@ export const leadSchema = Joi.object({
 		),
 	},
 });
+export default leadSchema;

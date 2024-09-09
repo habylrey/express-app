@@ -1,4 +1,6 @@
-export const userSchema = Joi.object({
+import Joi from 'joi';
+
+const userSchema = Joi.object({
 	body: {
 		name: Joi.string().min(1).max(30),
 		age: Joi.number().integer().min(1),
@@ -8,3 +10,4 @@ export const userSchema = Joi.object({
 		id: Joi.alternatives().try(Joi.number().integer().positive()),
 	}),
 });
+export default userSchema;

@@ -1,4 +1,6 @@
-export const legalDataSchema = Joi.object({
+import Joi from 'joi';
+
+const legalDataSchema = Joi.object({
 	body: {
 		name: Joi.string().min(1).max(30),
 		tax_number: Joi.string().min(1),
@@ -11,3 +13,4 @@ export const legalDataSchema = Joi.object({
 		),
 	},
 });
+export default legalDataSchema;

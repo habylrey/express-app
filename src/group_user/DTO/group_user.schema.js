@@ -1,5 +1,5 @@
 import Joi from 'joi';
-export const groupUserSchema = Joi.object({
+const groupUserSchema = Joi.object({
 	body: {
 		name: Joi.string().min(1).max(30),
 		role: Joi.string().min(1).max(30),
@@ -13,3 +13,4 @@ export const groupUserSchema = Joi.object({
 		),
 	},
 });
+export default groupUserSchema;

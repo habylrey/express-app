@@ -1,4 +1,6 @@
-export const orderSchema = Joi.object({
+import Joi from 'joi';
+
+const orderSchema = Joi.object({
 	body: {
 		product: Joi.string().min(1),
 		amount: Joi.number().integer(),
@@ -11,3 +13,4 @@ export const orderSchema = Joi.object({
 		),
 	},
 });
+export default orderSchema;

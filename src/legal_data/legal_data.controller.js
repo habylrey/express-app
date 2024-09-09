@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import LegalDataService from './legal_data.service.js';
 import validateRequest from '../common/validate.middleware.js';
-import { idSchema, legalDataSchema } from '../common/validate.schemas.js';
-
+import { idSchema } from '../common/validate.schemas.js';
+import legalDataSchema from './DTO/legal_data.schema.js';
 function createLegalDataRouter() {
 	const router = Router();
 

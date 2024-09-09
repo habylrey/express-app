@@ -2,7 +2,8 @@ import { Router } from 'express';
 import LeadService from './lead.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 import validateRequest from '../common/validate.middleware.js';
-import { idSchema, leadSchema } from '../common/validate.schemas.js';
+import { idSchema } from '../common/validate.schemas.js';
+import leadSchema from './DTO/lead.schema.js';
 
 function createLeadRouter() {
 	const router = Router();
