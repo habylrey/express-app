@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import models from '../common/models/model.service.js';
+import models from '../common/DTO/models/model.service.js';
 
 function login(req, res, next) {
 	const { login, password } = req.body;

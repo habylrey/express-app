@@ -9,6 +9,7 @@ import createLeadRoutes from '../lead/lead.controller.js';
 import createLegalDataRoutes from '../legal_data/legal_data.controller.js';
 import validateRequest from '../common/validate.middleware.js';
 import AuthSchema from '../auth/DTO/auth.schema.js';
+import ApiRequest from '../api/api.controller.js';
 
 const createGlobalRouter = () => {
 	const router = Router();
@@ -20,6 +21,8 @@ const createGlobalRouter = () => {
 
 	router.use('/group', createGroupRouter());
 	router.use('/group/member', createGroupUserRoutes());
+
+	router.use('/weather', ApiRequest());
 
 	return router;
 };
