@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import { request as undiciRequest } from 'undici';
 
 async function request(data) {
 	const url = new URL(data.baseUrl);
@@ -6,10 +6,8 @@ async function request(data) {
 		url.searchParams.append(key, data.query[key].toString());
 	}
 
-	const requestId = Date.now();
-
 	try {
-		const response = await fetch(url, {
+		const response = await undiciRequest(url.toString(), {
 			method: data.method,
 			headers: {
 				'Content-Type': 'application/json',
@@ -17,12 +15,12 @@ async function request(data) {
 			timeout: 10000,
 		});
 
-		const responseBody = await response.json();
+		const responseBody = await response.body.json();
 
-		if (!response.ok) {
+		if (response.statusCode >= 400) {
 			throw new Error(
 				JSON.stringify({
-					statusCode: response.status,
+					statusCode: response.statusCode,
 					body: responseBody,
 				})
 			);
