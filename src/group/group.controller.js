@@ -2,7 +2,8 @@ import { Router } from 'express';
 import GroupService from './group.service.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import groupSchema from './DTO/group.schema.js';
+import createBodySchema from './DTO/group.schema.js';
+import updateBodySchema from './DTO/group.schema.js';
 
 function createGroupRouter() {
 	const router = Router();
@@ -56,8 +57,13 @@ function createGroupRouter() {
 	return router
 		.get('/', getAllGroups)
 		.get('/:id', validateRequest(idSchema), getGroupById)
-		.post('/', validateRequest(groupSchema), createGroup)
-		.put('/:id', validateRequest(groupSchema), updateGroup)
+		.post('/', validateRequest(createBodySchema), createGroup)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateGroup
+		)
 		.delete('/:id', validateRequest(idSchema), deleteGroup);
 }
 

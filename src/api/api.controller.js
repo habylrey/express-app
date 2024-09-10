@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { Router } from 'express';
 import request from './api.service.js';
+import apiSchema from './DTO/api.schema.js';
+import validateRequest from '../common/validate.middleware.js';
 
 dotenv.config();
 
@@ -31,7 +33,7 @@ function ApiRequest() {
 		}
 	}
 
-	return router.get('/:city', getWeather);
+	return router.get('/:city', validateRequest(apiSchema), getWeather);
 }
 
 export default ApiRequest;

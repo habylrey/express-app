@@ -3,7 +3,8 @@ import LeadService from './lead.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import leadSchema from './DTO/lead.schema.js';
+import createBodySchema from './DTO/lead.schema.js';
+import updateBodySchema from './DTO/lead.schema.js';
 
 function createLeadRouter() {
 	const router = Router();
@@ -69,8 +70,13 @@ function createLeadRouter() {
 	return router
 		.get('/all', validateRequest(idSchema), getAllLeads)
 		.get('/:id', validateRequest(idSchema), getLeadById)
-		.post('/', validateRequest(leadSchema), createLead)
-		.put('/:id', validateRequest(leadSchema), updateLead)
+		.post('/', validateRequest(createBodySchema), createLead)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateLead
+		)
 		.delete('/:id', validateRequest(idSchema), deleteLead);
 }
 

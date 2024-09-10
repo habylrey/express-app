@@ -2,7 +2,8 @@ import { Router } from 'express';
 import LegalDataService from './legal_data.service.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import legalDataSchema from './DTO/legal_data.schema.js';
+import createBodySchema from './DTO/legal_data.schema.js';
+import updateBodySchema from './DTO/legal_data.schema.js';
 function createLegalDataRouter() {
 	const router = Router();
 
@@ -61,8 +62,13 @@ function createLegalDataRouter() {
 	return router
 		.get('/all', validateRequest(idSchema), getAllLegalData)
 		.get('/:id', validateRequest(idSchema), getLegalDataById)
-		.post('/', validateRequest(legalDataSchema), createLegalData)
-		.put('/:id', validateRequest(legalDataSchema), updateLegalData)
+		.post('/', validateRequest(createBodySchema), createLegalData)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateLegalData
+		)
 		.delete('/:id', validateRequest(idSchema), deleteLegalData);
 }
 

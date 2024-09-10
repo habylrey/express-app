@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import createGlobalRouter from './server/router.js';
 import { errorHandlerMiddleware } from './server/error.handler.js';
-import requestLogger from './common/DTO/logger.middleware.js';
+import requestLogger from './common/logger.middleware.js';
 dotenv.config();
 const app = express();
 app.use(express.json());

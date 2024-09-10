@@ -2,7 +2,8 @@ import { Router } from 'express';
 import OrderService from './order.service.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import orderSchema from './DTO/order.schema.js';
+import createBodySchema from './DTO/order.schema.js';
+import updateBodySchema from './DTO/order.schema.js';
 function createOrderRouter() {
 	const router = Router();
 
@@ -57,8 +58,13 @@ function createOrderRouter() {
 	return router
 		.get('/all', validateRequest(idSchema), getAllOrders)
 		.get('/:id', validateRequest(idSchema), getOrderById)
-		.post('/', validateRequest(orderSchema), createOrder)
-		.put('/:id', validateRequest(orderSchema), updateOrder)
+		.post('/', validateRequest(createBodySchema), createOrder)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateOrder
+		)
 		.delete('/:id', validateRequest(idSchema), deleteOrder);
 }
 

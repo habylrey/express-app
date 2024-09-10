@@ -1,4 +1,4 @@
-import { sequelize } from './models/model.service.js';
+import { sequelize } from './DTO/models/model.service.js';
 async function syncDatabase() {
 	try {
 		await sequelize.sync({ force: false });

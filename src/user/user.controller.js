@@ -2,7 +2,8 @@ import { Router } from 'express';
 import UserService from './user.service.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import userSchema from './DTO/user.schema.js';
+import createBodySchema from './DTO/user.schema.js';
+import updateBodySchema from './DTO/user.schema.js';
 
 function createUserRouter() {
 	const router = Router();
@@ -58,8 +59,13 @@ function createUserRouter() {
 	return router
 		.get('/', getAllUsers)
 		.get('/:id', validateRequest(idSchema), getUserById)
-		.post('/', validateRequest(userSchema), createUser)
-		.put('/:id', updateUser, validateRequest(userSchema))
+		.post('/', validateRequest(createBodySchema), createUser)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateUser
+		)
 		.delete('/:id', validateRequest(idSchema), deleteUser);
 }
 

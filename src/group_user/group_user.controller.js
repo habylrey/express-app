@@ -3,7 +3,8 @@ import GroupUserService from './group_user.service.js';
 import { NotFoundException } from '../server/server.exceptions.js';
 import validateRequest from '../common/validate.middleware.js';
 import { idSchema } from '../common/validate.schemas.js';
-import groupUserSchema from './DTO/group_user.schema.js';
+import createBodySchema from './DTO/group_user.schema.js';
+import updateBodySchema from './DTO/group_user.schema.js';
 
 function createGroupUserRouter() {
 	const router = Router();
@@ -12,8 +13,8 @@ function createGroupUserRouter() {
 		try {
 			const groupUsers = await GroupUserService.getAllGroupUsers();
 			res.json(groupUsers);
-		} catch (err) {
-			next(err);
+		} catch {
+			next();
 		}
 	}
 
@@ -28,8 +29,8 @@ function createGroupUserRouter() {
 				);
 			}
 			res.json(groupUser);
-		} catch (err) {
-			next(err);
+		} catch {
+			next();
 		}
 	}
 
@@ -39,8 +40,8 @@ function createGroupUserRouter() {
 				req.body
 			);
 			res.status(201).json(newGroupUser);
-		} catch (err) {
-			next(err);
+		} catch {
+			next();
 		}
 	}
 
@@ -56,8 +57,8 @@ function createGroupUserRouter() {
 				);
 			}
 			res.json(updatedGroupUser);
-		} catch (err) {
-			next(err);
+		} catch {
+			next();
 		}
 	}
 
@@ -65,16 +66,21 @@ function createGroupUserRouter() {
 		try {
 			await GroupUserService.deleteGroupUser(req.params.id);
 			res.status(204).end();
-		} catch (err) {
-			next(err);
+		} catch {
+			next();
 		}
 	}
 
 	return router
 		.get('/all', validateRequest(idSchema), getAllGroupUsers)
 		.get('/:id', validateRequest(idSchema), getGroupUserById)
-		.post('/', validateRequest(groupUserSchema), createGroupUser)
-		.put('/:id', validateRequest(groupUserSchema), updateGroupUser)
+		.post('/', validateRequest(createBodySchema), createGroupUser)
+		.put(
+			'/:id',
+			validateRequest(updateBodySchema),
+			validateRequest(idSchema),
+			updateGroupUser
+		)
 		.delete('/:id', validateRequest(idSchema), deleteGroupUser);
 }
 

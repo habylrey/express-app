@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import requestLogger from '../common/logger.middleware.js';
 
 async function request(data) {
 	const url = new URL(data.baseUrl);
@@ -8,14 +7,6 @@ async function request(data) {
 	}
 
 	const requestId = Date.now();
-
-	// requestLogger.info({
-	//     requestId,
-	//     type: 'outgoing request',
-	//     method: data.method,
-	//     url: url.toString(),
-	//     body: data.body,
-	// });
 
 	try {
 		const response = await fetch(url, {
@@ -28,15 +19,6 @@ async function request(data) {
 
 		const responseBody = await response.json();
 
-		// requestLogger.info({
-		//     requestId,
-		//     type: 'outgoing request response',
-		//     response: {
-		//         status: response.status,
-		//         body: responseBody,
-		//     },
-		// });
-
 		if (!response.ok) {
 			throw new Error(
 				JSON.stringify({
@@ -48,11 +30,6 @@ async function request(data) {
 
 		return responseBody;
 	} catch (error) {
-		// requestLogger.error({
-		//     requestId,
-		//     type: 'request error',
-		//     error: error.message,
-		// });
 		throw error;
 	}
 }
