@@ -5,10 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "sync-db": "node src/common/syncDB.js",
     "start": "node src/index.js",
     "dev": "npm run sync-db && nodemon src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "sequelize:migration:create":"npx sequelize-cli model:generate",
+    "sequelize:migration:run":"npx sequelize-cli db:migrate",
+    "sequelize:migration:revert":"npx sequelize-cli db:migrate:undo"
+
   },
   "author": "",
   "license": "ISC",
@@ -16,13 +19,14 @@
     "babel-jest": "^29.7.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^5.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
+    "umzug": "^3.8.1",
     "undici": "^6.19.8"
   },
   "devDependencies": {
