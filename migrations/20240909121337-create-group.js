@@ -1,31 +1,30 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Groups', {
+    await queryInterface.createTable('groups', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       photo_file_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER, 
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Groups');
-  }
+    await queryInterface.dropTable('groups');
+  },
 };
