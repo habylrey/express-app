@@ -1,6 +1,8 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 export default {
-	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('group_users', {
+	up: async (queryInterface, Sequelize) => {
+		await queryInterface.createTable('users', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
@@ -10,14 +12,11 @@ export default {
 			name: {
 				type: Sequelize.STRING,
 			},
-			group_id: {
+			age: {
 				type: Sequelize.INTEGER,
 			},
-			role: {
-				type: Sequelize.STRING,
-			},
-			status: {
-				type: Sequelize.STRING,
+			user_file_id: {
+				type: Sequelize.INTEGER,
 			},
 			createdAt: {
 				allowNull: false,
@@ -29,8 +28,7 @@ export default {
 			},
 		});
 	},
-
-	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('group_users');
+	down: async (queryInterface, Sequelize) => {
+		await queryInterface.dropTable('users');
 	},
 };

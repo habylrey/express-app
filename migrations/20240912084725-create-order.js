@@ -1,20 +1,22 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 export default {
-	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('legaldata', {
+	up: async (queryInterface, Sequelize) => {
+		await queryInterface.createTable('orders', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			name: {
+			product: {
 				type: Sequelize.STRING,
 			},
 			user_id: {
-				type: Sequelize.INTEGER,
+				type: Sequelize.NUMBER,
 			},
-			tax_number: {
-				type: Sequelize.STRING,
+			amount: {
+				type: Sequelize.NUMBER,
 			},
 			createdAt: {
 				allowNull: false,
@@ -26,8 +28,7 @@ export default {
 			},
 		});
 	},
-
-	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('legaldata');
+	down: async (queryInterface, Sequelize) => {
+		await queryInterface.dropTable('orders');
 	},
 };

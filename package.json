@@ -19,6 +19,7 @@
     "coffee-script": "^1.12.7",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
+    "esm": "^3.2.25",
     "express": "^5.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
