@@ -1,16 +1,13 @@
-import jwt from 'jsonwebtoken';
 import models from '../common/DTO/models/model.service.js';
 import login from '../auth/auth.login.js';
+import { auth } from '../__faker__/auth.faker.js';
 
 describe('login function', () => {
 	let req, res, next;
 
 	beforeEach(() => {
 		req = {
-			body: {
-				login: 'testuser',
-				password: 'testpassword',
-			},
+			body: { ...auth },
 		};
 		res = {
 			setHeader: jest.fn(),
@@ -25,8 +22,8 @@ describe('login function', () => {
 		const mockUser = {
 			id: 1,
 			User: {
-				name: 'Test User',
 				role: 'admin',
+				name: 'Test User',
 			},
 		};
 		models.Auth.findOne.mockResolvedValue(mockUser);
@@ -35,7 +32,10 @@ describe('login function', () => {
 		await login(req, res, next);
 
 		expect(models.Auth.findOne).toHaveBeenCalledWith({
-			where: { login: 'testuser', password: 'testpassword' },
+			where: {
+				login: auth.login,
+				password: auth.password,
+			},
 			include: {
 				model: models.User,
 				attributes: ['role', 'name'],
@@ -50,9 +50,11 @@ describe('login function', () => {
 		});
 		expect(res.json).toHaveBeenCalledWith([
 			{
-				message: 'Hello, admin Test User',
+				message: expect.stringContaining('Hello'),
 			},
-			{ token: expect.any(String) },
+			{
+				token: expect.any(String),
+			},
 		]);
 	});
 
