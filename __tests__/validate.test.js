@@ -1,5 +1,5 @@
-import validateRequest from '../common/validate.middleware.js';
-import models from '../common/DTO/models/model.service.js';
+import validateRequest from '../src/common/validate.middleware.js';
+import models from '../src/common/DTO/models/model.service.js';
 import Joi from 'joi';
 import { group } from '../__faker__/validate.faker.js';
 
@@ -8,8 +8,8 @@ describe('validateRequest', () => {
 
 	beforeEach(() => {
 		req = {
-			body: {...group},
-			query: {id: group.id},
+			body: { ...group },
+			query: { id: group.id },
 		};
 		res = {
 			status: jest.fn().mockReturnThis(),

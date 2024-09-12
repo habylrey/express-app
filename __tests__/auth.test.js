@@ -1,5 +1,5 @@
-import models from '../common/DTO/models/model.service.js';
-import login from '../auth/auth.login.js';
+import models from '../src/common/DTO/models/model.service.js';
+import login from '../src/auth/auth.login.js';
 import { auth } from '../__faker__/auth.faker.js';
 
 describe('login function', () => {
@@ -50,10 +50,10 @@ describe('login function', () => {
 		});
 		expect(res.json).toHaveBeenCalledWith([
 			{
-				message: expect.stringContaining('Hello'),
+				message: expect.stringContaining(`Hello`),
 			},
 			{
-				token: expect.any(String),
+				token: res.setHeader.mock.calls[0][1].split(' ')[1],
 			},
 		]);
 	});

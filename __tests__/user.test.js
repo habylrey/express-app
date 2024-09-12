@@ -1,6 +1,6 @@
-import models from '../common/DTO/models/model.service.js';
-import userService from '../user/user.service.js';
-import { NotFoundException } from '../server/server.exceptions.js';
+import models from '../src/common/DTO/models/model.service.js';
+import userService from '../src/user/user.service.js';
+import { NotFoundException } from '../src/server/server.exceptions.js';
 import { users } from '../__faker__/user.faker.js';
 
 describe('userService', () => {
