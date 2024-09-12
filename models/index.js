@@ -8,9 +8,11 @@ import configFile from '../config/config.json' assert { type: 'json' };
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const configUrl = new URL('file://' + 'config/config.json');
+
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = configFile[env];
+const config = configUrl[env];
 const db = {};
 
 let sequelize;
