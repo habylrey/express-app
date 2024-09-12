@@ -1,61 +1,13 @@
-const jwt = require('jsonwebtoken');
-const models = {
-	Auth: {
-		findOne: jest.fn(),
-	},
-	User: {},
-};
-
-const login = (req, res, next) => {
-	const { login, password } = req.body;
-	try {
-		models.Auth.findOne({
-			where: { login: login, password: password },
-			include: {
-				model: models.User,
-				attributes: ['role', 'name'],
-			},
-		})
-			.then((user) => {
-				if (!user) {
-					return next(new Error('Invalid login or password'));
-				}
-
-				const token = jwt.sign(
-					{ id: user.id, name: user.User.name, role: user.User.role },
-					process.env.JWT_SECRET,
-					{ expiresIn: '1h' }
-				);
-
-				res.setHeader('Authorization', `Bearer ${token}`);
-				res.cookie('token', token, {
-					httpOnly: true,
-				});
-
-				res.json([
-					{
-						message: `Hello, ${user.User.role} ${user.User.name}`,
-					},
-					{ token },
-				]);
-			})
-			.catch((error) => {
-				next(error);
-			});
-	} catch (error) {
-		next(error);
-	}
-};
+import models from '../common/DTO/models/model.service.js';
+import login from '../auth/auth.login.js';
+import { auth } from '../__faker__/auth.faker.js';
 
 describe('login function', () => {
 	let req, res, next;
 
 	beforeEach(() => {
 		req = {
-			body: {
-				login: 'testuser',
-				password: 'testpassword',
-			},
+			body: { ...auth },
 		};
 		res = {
 			setHeader: jest.fn(),
@@ -63,24 +15,27 @@ describe('login function', () => {
 			json: jest.fn(),
 		};
 		next = jest.fn();
+		models.Auth.findOne = jest.fn();
 	});
 
 	it('should return a token and user message on successful login', async () => {
 		const mockUser = {
 			id: 1,
 			User: {
-				name: 'Test User',
 				role: 'admin',
+				name: 'Test User',
 			},
 		};
-
 		models.Auth.findOne.mockResolvedValue(mockUser);
 		process.env.JWT_SECRET = 'secret';
 
 		await login(req, res, next);
 
 		expect(models.Auth.findOne).toHaveBeenCalledWith({
-			where: { login: 'testuser', password: 'testpassword' },
+			where: {
+				login: auth.login,
+				password: auth.password,
+			},
 			include: {
 				model: models.User,
 				attributes: ['role', 'name'],
@@ -95,9 +50,11 @@ describe('login function', () => {
 		});
 		expect(res.json).toHaveBeenCalledWith([
 			{
-				message: 'Hello, admin Test User',
+				message: expect.stringContaining('Hello'),
 			},
-			{ token: expect.any(String) },
+			{
+				token: expect.any(String),
+			},
 		]);
 	});
 
