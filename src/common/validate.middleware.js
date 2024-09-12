@@ -1,5 +1,3 @@
-import Joi from 'joi';
-
 const validateRequest = (schema) => {
 	return (req, res, next) => {
 		const { body, query } = req;
